@@ -4,8 +4,19 @@ import { useEffect, useState } from "react";
 // Errors
 import { FetchError } from "../errors/FetchError";
 
-export function useFetch(fetchFunction, options) {
-  const initialState = {
+type Options = {
+  [key: string]: any;
+}
+type FetchFunction = (options?: Options) => Promise<any>;
+
+type State = {
+  data: any,
+  error: FetchError | null,
+  isLoading: boolean,
+}
+
+export function useFetch(fetchFunction: FetchFunction, options: Options) {
+  const initialState: State = {
     data: null,
     error: null,
     isLoading: false,
@@ -20,13 +31,23 @@ export function useFetch(fetchFunction, options) {
         error: null,
         isLoading: true,
       });
-
-      const data = await fetchFunction(options);
-      setState({
-        data,
-        error: null,
-        isLoading: false,
-      });
+      try {
+        const data = await fetchFunction(options);
+        setState({
+          data,
+          error: null,
+          isLoading: false,
+        });
+      } catch (e: unknown) {
+        const error = e instanceof Error
+          ? new FetchError(500, e.message, "An error occurred while fetching data")
+          : new FetchError(500, "Unknown error", "An error occurred while fetching data");
+        setState({
+          data: null,
+          error,
+          isLoading: false
+        });
+      }
     };
 
     void fetchData();
