@@ -32,6 +32,8 @@ const AstronautController = {
     const { id } = req.params;
     try {
       const data = await knex('astronauts').select('astronauts.*', 'planets.*', 'images.path', 'images.name as imageName')
+        .join('planets', 'planets.id', '=', 'astronauts.originPlanetId')
+        .join('images', 'images.id', '=', 'planets.imageId')
         .where('astronauts.id', id).first();
       if (data) {
         res.status(200).json({
