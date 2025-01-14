@@ -3,23 +3,27 @@ import knex from '../db';
 
 const PlanetController = {
   getAll: async (req: Request, res: Response): Promise<void> => {
-
-    try {
-      const planets = (await knex('planets')
+    const searchPlanet: string | undefined = req.query.planet?.toString();
+    let searhPlanetQuery = knex('planets')
       .select('planets.*', 'images.path', 'images.name as imageName')
-      .join('images', 'images.id' , '=' ,'planets.imageId')
+      .join('images', 'images.id', '=', 'planets.imageId')
       .where((queryBuilder) => {
-      }))
-      .map(({id, name, isHabitable, description, path, imageName}) => ({
-        id,
-        name,
-        isHabitable,
-        description,
-        image: {
-          path,
-          name: imageName,
-        },
-      }));
+        if (searchPlanet) {
+          queryBuilder.where('planets.name', 'like', `%${searchPlanet}%`)
+        }
+      })
+    try {
+      const planets = (await searhPlanetQuery)
+        .map(({ id, name, isHabitable, description, path, imageName }) => ({
+          id,
+          name,
+          isHabitable,
+          description,
+          image: {
+            path,
+            name: imageName,
+          },
+        }));
       res.status(200).json(planets);
     } catch (error) {
       res.status(500).json({ error: 'Internal Server Error' });
