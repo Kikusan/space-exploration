@@ -15,7 +15,7 @@ type State = {
   isLoading: boolean,
 }
 
-export function useFetch(fetchFunction: FetchFunction, options: Options) {
+export function useFetch(fetchFunction: FetchFunction, options?: Options) {
   const initialState: State = {
     data: null,
     error: null,
