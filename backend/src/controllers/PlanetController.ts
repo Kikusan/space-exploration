@@ -3,7 +3,7 @@ import knex from '../db';
 
 const PlanetController = {
   getAll: async (req: Request, res: Response): Promise<void> => {
-    const searchPlanet: string | undefined = req.query.planet?.toString();
+    const searchPlanet: string | undefined = req.query.filterName?.toString();
     let searhPlanetQuery = knex('planets')
       .select('planets.*', 'images.path', 'images.name as imageName')
       .join('images', 'images.id', '=', 'planets.imageId')
