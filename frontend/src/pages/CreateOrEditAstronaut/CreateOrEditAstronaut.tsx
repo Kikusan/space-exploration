@@ -25,6 +25,7 @@ import { useCurrentPlanet } from "../../contexts/SpaceTravelContext.tsx";
 
 // Styles
 import styles from "./CreateOrEditAstronaut.module.css";
+import { useMemo } from "react";
 
 export function CreateOrEditAstronaut() {
   const navigate = useNavigate();
@@ -51,9 +52,11 @@ export function CreateOrEditAstronaut() {
     mode === "create" ? handleAstronautFormCreate : handleAstronautFormEdit;
 
   const { currentPlanet } = useCurrentPlanet();
-  const { isLoading, data } = useFetch((options?: RequestInit) =>
-    getOneAstronautFromAPI(astronautId, options),
-  );
+  const fetchAstronaut = useMemo(() => {
+    return (options?: RequestInit) =>
+      getOneAstronautFromAPI(astronautId, options);
+  }, []);
+  const { isLoading, data } = useFetch(fetchAstronaut);
 
   return (
     <Flexbox flexDirection="column" className={styles.createoreditastronaut}>
