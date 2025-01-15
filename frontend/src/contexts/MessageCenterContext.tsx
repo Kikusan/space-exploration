@@ -1,11 +1,11 @@
 // React
-import { createContext, useState, useContext, ReactNode } from 'react';
+import { createContext, useState, useContext, ReactNode, useMemo } from "react";
 
 // Error
-import { ContextError } from '../errors/ContextError';
+import { ContextError } from "../errors/ContextError";
 
 // Types
-import { HUDSnackbarTypeEnum } from '../components/HUDSnackbar';
+import { HUDSnackbarTypeEnum } from "../components/HUDSnackbar";
 
 type MessageCenterContextType = {
   type: HUDSnackbarTypeEnum;
@@ -16,15 +16,16 @@ type MessageCenterContextType = {
 };
 
 const initialMessageCenterContext: MessageCenterContextType = {
-  type: 'info',
+  type: "info",
   message: null,
-  updateMessageCenterContext: () => {
-  },
+  updateMessageCenterContext: () => {},
 };
 
 const MessageCenterContext = createContext(initialMessageCenterContext);
 
-export function MessageCenterProvider({ children }: { children: ReactNode }) {
+export function MessageCenterProvider({
+  children,
+}: Readonly<{ children: ReactNode }>) {
   const [messageState, setMessageState] = useState<MessageCenterContextType>(
     initialMessageCenterContext,
   );
@@ -38,13 +39,16 @@ export function MessageCenterProvider({ children }: { children: ReactNode }) {
     }));
   };
 
+  const value = useMemo(
+    () => ({
+      ...messageState,
+      updateMessageCenterContext,
+    }),
+    [messageState, updateMessageCenterContext],
+  );
+
   return (
-    <MessageCenterContext.Provider
-      value={{
-        ...messageState,
-        updateMessageCenterContext,
-      }}
-    >
+    <MessageCenterContext.Provider value={value}>
       {children}
     </MessageCenterContext.Provider>
   );
@@ -55,8 +59,8 @@ export function useMessageCenterContext(): MessageCenterContextType {
 
   if (!messageCenterContext) {
     throw new ContextError(
-      'MessageCenterContext',
-      'no MessageCenterContext available, is the Provider was set?',
+      "MessageCenterContext",
+      "no MessageCenterContext available, is the Provider was set?",
     );
   }
 
@@ -70,9 +74,9 @@ export function useMessageCenter(): {
   const { updateMessageCenterContext } = useMessageCenterContext();
 
   const pushInfoMessage = (message: string) =>
-    updateMessageCenterContext({ type: 'info', message });
+    updateMessageCenterContext({ type: "info", message });
   const pushErrorMessage = (message: string) =>
-    updateMessageCenterContext({ type: 'error', message });
+    updateMessageCenterContext({ type: "error", message });
 
   return { pushErrorMessage, pushInfoMessage };
 }
