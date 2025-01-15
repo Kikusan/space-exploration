@@ -15,6 +15,7 @@ import { Flexbox } from "../../../components/Flexbox";
 import {
   useCurrentPlanet,
   usePlanetList,
+  useSelectedPlanetForSpaceTravel,
 } from "../../../contexts/SpaceTravelContext.tsx";
 
 // API
@@ -112,13 +113,17 @@ export function AstronautForm({
   const handleChange = (selectedOption: AutoCompleteOptionType) => {
     setAstronautOriginPlanet(selectedOption.value);
   };
-
+  const { selectedPlanetForSpaceTravel } = useSelectedPlanetForSpaceTravel();
   useEffect(() => {
     if (astronautForUpdate) {
       const { firstname, lastname, originPlanet } = astronautForUpdate;
       setAstronautFirstname(firstname);
       setAstronautLastname(lastname);
       setAstronautOriginPlanet(originPlanet?.id?.toString());
+    } else {
+      setAstronautOriginPlanet(
+        selectedPlanetForSpaceTravel?.id?.toString() ?? "",
+      );
     }
   }, [astronautForUpdate]);
 
@@ -160,15 +165,18 @@ export function AstronautForm({
             error={formState.lastname}
             onChange={(e) => setAstronautLastname(e.target.value)}
           />
-          <HUDAutoComplete
-            name="astronautOriginPlanet"
-            label="Astronaut origin planet"
-            placeholder="Tapez pour rechercher..."
-            fetchOptions={fetchOptions}
-            defaultValue={astronautPlanet()}
-            onChange={handleChange}
-            error={undefined}
-          />
+          {mode !== "create" ? (
+            <HUDAutoComplete
+              name="astronautOriginPlanet"
+              label="Astronaut origin planet"
+              placeholder="Tapez pour rechercher..."
+              fetchOptions={fetchOptions}
+              defaultValue={astronautPlanet()}
+              onChange={handleChange}
+              error={undefined}
+            />
+          ) : null}
+
           <Flexbox
             className={styles.astronautformButtons}
             alignItems="center"
