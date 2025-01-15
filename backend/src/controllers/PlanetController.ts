@@ -57,7 +57,7 @@ const PlanetController = {
     const { name, isHabitable, imageId } = req.body;
     try {
       const [id] = await knex('planets').insert({ name, isHabitable, imageId });
-      res.status(206).json({
+      res.status(201).json({
         id, name, isHabitable, imageId,
       });
     } catch (error) {
