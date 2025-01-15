@@ -4,6 +4,7 @@ import {
   forwardRef,
   InputHTMLAttributes,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -92,12 +93,10 @@ export const HUDAutoComplete = forwardRef<
   });
   const [selectedOption, setSelectedOption] =
     useState<AutoCompleteOptionType | null>();
-
-  const {
-    isLoading,
-    data,
-    error: fetchError,
-  } = useFetch((options?: RequestInit) => fetchOptions(undefined, options));
+  const getOptions = useMemo(() => {
+    return (options?: RequestInit) => fetchOptions(undefined, options);
+  }, []);
+  const { isLoading, data, error: fetchError } = useFetch(getOptions);
 
   useEffect(() => {
     setOptions({

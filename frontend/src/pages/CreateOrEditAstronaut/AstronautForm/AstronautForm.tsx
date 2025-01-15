@@ -12,7 +12,10 @@ import { HUDButton } from "../../../components/HUDButton";
 import { Flexbox } from "../../../components/Flexbox";
 
 // Context
-import { useCurrentPlanet } from "../../../contexts/SpaceTravelContext.tsx";
+import {
+  useCurrentPlanet,
+  usePlanetList,
+} from "../../../contexts/SpaceTravelContext.tsx";
 
 // API
 import {
@@ -22,6 +25,11 @@ import {
 
 // Styles
 import styles from "./AstronautForm.module.css";
+import {
+  AutoCompleteOptionType,
+  HUDAutoComplete,
+} from "../../../components/HUDAutoComplete/index.ts";
+import { Planet } from "../../../api/planet.api.ts";
 
 type AstronautFormProps = {
   astronautForUpdate?: Astronaut | null;
@@ -54,11 +62,10 @@ export function AstronautForm({
   const [formState, setFormState] = useState<FormStateType>({});
   const [astronautFirstname, setAstronautFirstname] = useState("");
   const [astronautLastname, setAstronautLastname] = useState("");
-  const [astronautOriginPlanet] = useState("");
+  const [astronautOriginPlanet, setAstronautOriginPlanet] = useState("");
 
   const validateAndSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("ici");
     const validationErrors: FormStateType = {};
     if (astronautFirstname === "") {
       validationErrors.firstname = "firstname is required";
@@ -66,34 +73,61 @@ export function AstronautForm({
     if (astronautLastname === "") {
       validationErrors.lastname = "lastname is require";
     }
-    // if (astronautOriginPlanet === "") {
-    //   validationErrors.planet = "planet of origin is required";
-    // }
+    if (astronautOriginPlanet === "") {
+      validationErrors.planet = "planet is require";
+    }
 
-    // submit the form if there is no validation error
     if (
       !Object.keys(validationErrors).length &&
       astronautFirstname &&
-      astronautLastname
+      astronautLastname &&
+      astronautOriginPlanet
     ) {
-      console.log("submit");
       onSubmit({
         firstname: astronautFirstname,
         lastname: astronautLastname,
-        originPlanetId: parseInt("1"),
+        originPlanetId: parseInt(astronautOriginPlanet),
       });
     } else {
       setFormState(validationErrors);
     }
   };
+  const { planetList } = usePlanetList();
+
+  const fetchOptions = async (
+    searchTerm?: string,
+  ): Promise<AutoCompleteOptionType[]> => {
+    const planetOptions = planetList?.planetList?.map((planet: Planet) => ({
+      label: planet.name,
+      value: planet.id.toString(),
+    }));
+
+    return (
+      planetOptions?.filter((option) =>
+        option.label.toLowerCase().includes(searchTerm?.toLowerCase() ?? ""),
+      ) || []
+    );
+  };
+
+  const handleChange = (selectedOption: AutoCompleteOptionType) => {
+    setAstronautOriginPlanet(selectedOption.value);
+  };
 
   useEffect(() => {
     if (astronautForUpdate) {
-      const { firstname, lastname } = astronautForUpdate;
+      const { firstname, lastname, originPlanet } = astronautForUpdate;
       setAstronautFirstname(firstname);
       setAstronautLastname(lastname);
+      setAstronautOriginPlanet(originPlanet?.id?.toString());
     }
   }, [astronautForUpdate]);
+
+  const astronautPlanet = () => {
+    return {
+      label: astronautForUpdate?.originPlanet?.name ?? "",
+      value: astronautForUpdate?.originPlanet?.id?.toString() ?? "",
+    };
+  };
 
   return (
     <Flexbox className={componentClassNames} flexDirection="column">
@@ -125,6 +159,15 @@ export function AstronautForm({
             defaultValue={astronautForUpdate?.lastname ?? ""}
             error={formState.lastname}
             onChange={(e) => setAstronautLastname(e.target.value)}
+          />
+          <HUDAutoComplete
+            name="astronautOriginPlanet"
+            label="Astronaut origin planet"
+            placeholder="Tapez pour rechercher..."
+            fetchOptions={fetchOptions}
+            defaultValue={astronautPlanet()}
+            onChange={handleChange}
+            error={undefined}
           />
           <Flexbox
             className={styles.astronautformButtons}
