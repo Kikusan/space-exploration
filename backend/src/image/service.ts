@@ -1,26 +1,24 @@
-import Astronaut from "./entities/Astronaut";
-import AstronautToCreate from "./entities/AstronautToCreate";
-import AstronautToUpdate from "./entities/AstronautToUpdate";
-import IAstronautRepository from "./interfaces/IAstronautRepository";
-import IAstronautService from "./interfaces/IAstronautService";
+import Image from "./entities/image";
+import IAstronautRepository from "./interfaces/IImageRepository";
+import IAstronautService from "./interfaces/IImageService";
 
-export class AstronautService implements IAstronautService {
+export class ImageService implements IAstronautService {
     private readonly astronautRepository: IAstronautRepository;
     constructor(astronautRepository: IAstronautRepository) {
         this.astronautRepository = astronautRepository
     }
-    getAll = async (): Promise<Astronaut[]> => {
+    getAll = async (): Promise<Image[]> => {
         const astronauts = await this.astronautRepository.getAll();
         return astronauts;
     }
-    getById = async (id: number): Promise<Astronaut> => {
+    getById = async (id: number): Promise<Image> => {
         const astronaut = await this.astronautRepository.getById(id);
         return astronaut;
     }
-    create = (astronaut: AstronautToCreate): Promise<Astronaut> => {
+    create = (astronaut: Image): Promise<Image> => {
         return this.astronautRepository.create(astronaut)
     }
-    update = (astronaut: AstronautToUpdate): Promise<Astronaut> => {
+    update = (astronaut: Image): Promise<Image> => {
         return this.astronautRepository.update(astronaut)
     }
     delete = (id: number): Promise<void> => {

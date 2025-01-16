@@ -1,18 +1,16 @@
 import { Request, Response } from 'express';
-import IAstronautService from './interfaces/IAstronautService';
-import AstronautToCreate from "./entities/AstronautToCreate";
-import AstronautToUpdate from './entities/AstronautToUpdate';
 import ErrorWithStatus from '../common/errorWithStatus';
-import Astronaut from './entities/Astronaut';
-export class AstronautController {
-    private readonly astronautService: IAstronautService;
-    constructor(astronautService: IAstronautService) {
-        this.astronautService = astronautService;
+import IImageService from './interfaces/IImageService';
+import Image from './entities/image';
+export class ImageController {
+    private readonly imageService: IImageService;
+    constructor(imageService: IImageService) {
+        this.imageService = imageService;
     }
     getAll = async (req: Request, res: Response) => {
         try {
-            const astronauts: Astronaut[] = await this.astronautService.getAll()
-            res.status(200).json(astronauts);
+            const images: Image[] = await this.imageService.getAll()
+            res.status(200).json(images);
         } catch (error) {
             console.log(error)
             if (error instanceof ErrorWithStatus) {
@@ -28,7 +26,7 @@ export class AstronautController {
         const { id } = req.params;
         try {
             const idToGet = parseInt(id)
-            const astronaut: Astronaut = await this.astronautService.getById(idToGet)
+            const astronaut: Image = await this.imageService.getById(idToGet)
             res.status(200).json(astronaut);
         } catch (error) {
             console.log(error)
@@ -41,14 +39,13 @@ export class AstronautController {
     }
 
     create = async (req: Request, res: Response) => {
-        const { firstname, lastname, originPlanetId } = req.body;
+        const { name, path } = req.body;
         try {
-            const astronautToCreate: AstronautToCreate = {
-                firstname,
-                lastname,
-                originPlanetid: parseInt(originPlanetId)
+            const imageToCreate: Image = {
+                name,
+                path
             }
-            const astronaut = await this.astronautService.create(astronautToCreate)
+            const astronaut = await this.imageService.create(imageToCreate)
             res.status(201).json(astronaut);
         } catch (error) {
             console.log(error)
@@ -62,15 +59,14 @@ export class AstronautController {
 
     update = async (req: Request, res: Response) => {
         const { id } = req.params;
-        const { firstname, lastname, originPlanetId } = req.body;
+        const { name, path } = req.body;
         try {
-            const astronautToUpdate: AstronautToUpdate = {
+            const imageToUpdate: Image = {
                 id: parseInt(id),
-                firstname,
-                lastname,
-                originPlanetId: parseInt(originPlanetId)
+                name,
+                path
             }
-            const astronaut = await this.astronautService.update(astronautToUpdate)
+            const astronaut = await this.imageService.update(imageToUpdate)
             res.status(200).json(astronaut);
         } catch (error) {
             console.log(error)
@@ -87,7 +83,7 @@ export class AstronautController {
         try {
 
             const idToDelete = parseInt(id)
-            const astronaut = await this.astronautService.delete(idToDelete)
+            const astronaut = await this.imageService.delete(idToDelete)
             res.status(200).json(astronaut);
         } catch (error) {
             console.log(error)

@@ -2,7 +2,7 @@
 import Astronaut from "./entities/Astronaut";
 import AstronautToUpdate from "./entities/AstronautToUpdate";
 import AstronautToCreate from "./entities/AstronautToCreate";
-import IAstronautRepository from "./interface/IAstronautRepository";
+import IAstronautRepository from "./interfaces/IAstronautRepository";
 import knex from "../db";
 
 export class KnexAstronautRepository implements IAstronautRepository {

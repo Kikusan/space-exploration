@@ -2,7 +2,7 @@
 
 import express from 'express';
 import cors from 'cors';
-import ImageRouter from './src/routes/ImageRouter';
+import ImageRouter from './src/image/router';
 import PlanetRouter from './src/routes/PlanetRouter';
 import AstronautRouter from './src/astronaut/router';
 
