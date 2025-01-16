@@ -3,7 +3,7 @@
 import express from 'express';
 import cors from 'cors';
 import ImageRouter from './src/image/router';
-import PlanetRouter from './src/routes/PlanetRouter';
+import PlanetRouter from './src/planet/router';
 import AstronautRouter from './src/astronaut/router';
 
 const app = express();
