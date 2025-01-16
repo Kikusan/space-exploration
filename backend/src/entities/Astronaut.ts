@@ -4,7 +4,7 @@ interface Astronaut {
   id: number;
   firstname: string;
   lastname: string;
-  originPlanetId: Planet;
+  originPlanet: Planet;
 }
 
 export default Astronaut;

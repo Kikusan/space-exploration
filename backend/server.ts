@@ -4,7 +4,7 @@ import express from 'express';
 import cors from 'cors';
 import ImageRouter from './src/routes/ImageRouter';
 import PlanetRouter from './src/routes/PlanetRouter';
-import AstronautRouter from './src/routes/AstronautRouter';
+import AstronautRouter from './src/astronaut/router';
 
 const app = express();
 
@@ -16,5 +16,5 @@ app.use('/images', ImageRouter);
 app.use('/planets', PlanetRouter);
 app.use('/astronauts', AstronautRouter);
 
-app.listen(4000, () => {});
+app.listen(4000, () => { });
 
