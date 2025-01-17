@@ -7,6 +7,10 @@ import { VitePWA } from "vite-plugin-pwa";
 export default defineConfig({
   plugins: [svgr(), VitePWA({ registerType: "autoUpdate" }), react()],
   server: {
+    watch: {
+      usePolling: true,
+      interval: 1000,
+    },
     port: 3000,
     host: true,
   },

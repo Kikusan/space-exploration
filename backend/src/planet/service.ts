@@ -10,7 +10,7 @@ export class PlanetService implements IPlanetService {
     constructor(planetRepository: IPlanetRepository) {
         this.planetRepository = planetRepository
     }
-    getAll = async (searchPlanet: string | undefined): Promise<Planet[]> => {
+    getAll = async (searchPlanet: string | undefined = undefined): Promise<Planet[]> => {
         const astronauts = await this.planetRepository.getAll(searchPlanet);
         return astronauts;
     }

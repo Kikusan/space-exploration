@@ -84,7 +84,7 @@ export class ImageController {
 
             const idToDelete = parseInt(id)
             const astronaut = await this.imageService.delete(idToDelete)
-            res.status(200).json(astronaut);
+            res.status(204).json(astronaut);
         } catch (error) {
             console.log(error)
             if (error instanceof ErrorWithStatus) {

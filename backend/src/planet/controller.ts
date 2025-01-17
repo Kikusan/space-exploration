@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import IplanetService from './interfaces/IPlanetService';
-import ErrorWithStatus from '../common/errorWithStatus';
 import Planet from './entities/Planet';
 import PlanetToCreate from './entities/PlanetToCreate';
 import PlanetToUpdate from './entities/PlanetToUpdate';
+import NotfoundError from '../common/notFoundError';
+import UnexpectedError from '../common/unexpectedError';
 export class PlanetController {
     private readonly planetService: IplanetService;
     constructor(planetService: IplanetService) {
@@ -15,9 +16,8 @@ export class PlanetController {
             const planets: Planet[] = await this.planetService.getAll(searchPlanet)
             res.status(200).json(planets);
         } catch (error) {
-            console.log(error)
-            if (error instanceof ErrorWithStatus) {
-                res.status(error.statusCode).json({ error: error.message })
+            if (error instanceof UnexpectedError) {
+                res.status(500).json({ error: error.message })
             } else {
                 res.status(500).json({ error: 'Internal Server Error' })
             }
@@ -32,9 +32,10 @@ export class PlanetController {
             const planet: Planet = await this.planetService.getById(idToGet)
             res.status(200).json(planet);
         } catch (error) {
-            console.log(error)
-            if (error instanceof ErrorWithStatus) {
-                res.status(error.statusCode).json({ error: error.message })
+            if (error instanceof NotfoundError) {
+                res.status(404).json({ error: error.message })
+            } else if (error instanceof UnexpectedError) {
+                res.status(500).json({ error: error.message })
             } else {
                 res.status(500).json({ error: 'Internal Server Error' })
             }
@@ -46,16 +47,15 @@ export class PlanetController {
         try {
             const planetToCreate: PlanetToCreate = {
                 name,
-                isHabitable: isHabitable === 'true',
+                isHabitable,
                 imageId: parseInt(imageId),
                 description
             }
             const planet = await this.planetService.create(planetToCreate)
             res.status(201).json(planet);
         } catch (error) {
-            console.log(error)
-            if (error instanceof ErrorWithStatus) {
-                res.status(error.statusCode).json({ error: error.message })
+            if (error instanceof UnexpectedError) {
+                res.status(500).json({ error: error.message })
             } else {
                 res.status(500).json({ error: 'Internal Server Error' })
             }
@@ -69,16 +69,17 @@ export class PlanetController {
             const planetToUpdate: PlanetToUpdate = {
                 id: parseInt(id),
                 name,
-                isHabitable: isHabitable === 'true',
+                isHabitable,
                 imageId: parseInt(imageId),
                 description
             }
             const planet = await this.planetService.update(planetToUpdate)
             res.status(200).json(planet);
         } catch (error) {
-            console.log(error)
-            if (error instanceof ErrorWithStatus) {
-                res.status(error.statusCode).json({ error: error.message })
+            if (error instanceof NotfoundError) {
+                res.status(404).json({ error: error.message })
+            } else if (error instanceof UnexpectedError) {
+                res.status(500).json({ error: error.message })
             } else {
                 res.status(500).json({ error: 'Internal Server Error' })
             }
@@ -91,11 +92,12 @@ export class PlanetController {
 
             const idToDelete = parseInt(id)
             const planet = await this.planetService.delete(idToDelete)
-            res.status(200).json(planet);
+            res.status(204).json(planet);
         } catch (error) {
-            console.log(error)
-            if (error instanceof ErrorWithStatus) {
-                res.status(error.statusCode).json({ error: error.message })
+            if (error instanceof NotfoundError) {
+                res.status(404).json({ error: error.message })
+            } else if (error instanceof UnexpectedError) {
+                res.status(500).json({ error: error.message })
             } else {
                 res.status(500).json({ error: 'Internal Server Error' })
             }

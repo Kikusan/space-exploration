@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { AstronautController } from './../controller';
 import { AstronautService } from './../service';
 import { FakeAstronautRepository } from './fakeRepository';
-import AstronautToCreate from '../entities/AstronautToCreate';
 
 describe('AstronautController', () => {
     const fakeRepository = new FakeAstronautRepository()
@@ -103,7 +102,7 @@ describe('AstronautController', () => {
     })
 
     describe('DELETE /astronauts/:id', () => {
-        it('should return an astronaut with status 304', async () => {
+        it('should return an astronaut with status 204', async () => {
             req = { params: { id: "2" } }
             await astronautController.delete(req as Request, res as Response);
             expect(res.status).toHaveBeenCalledWith(204);

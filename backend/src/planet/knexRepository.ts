@@ -1,9 +1,12 @@
 
+
 import knex from "../db";
 import Planet from "./entities/Planet";
 import PlanetToCreate from "./entities/PlanetToCreate";
 import PlanetToUpdate from "./entities/PlanetToUpdate";
 import IPlanetRepository from "./interfaces/IPlanetRepository";
+import UnexpectedError from "../common/unexpectedError";
+import NotFoundError from "../common/notFoundError"
 
 export class KnexPlanetRepository implements IPlanetRepository {
     private knexResultToPlanet(knexResult: KnexResult): Planet {
@@ -34,7 +37,7 @@ export class KnexPlanetRepository implements IPlanetRepository {
                 .map((knexResult: KnexResult) => this.knexResultToPlanet(knexResult));
             return planets
         } catch (error) {
-            throw new Error('internal server error')
+            throw new UnexpectedError('database error')
         }
     }
     getById = async (id: number): Promise<Planet> => {
@@ -45,10 +48,13 @@ export class KnexPlanetRepository implements IPlanetRepository {
                 return updatedPlanet
 
             } else {
-                throw new Error("not found.");
+                throw new NotFoundError('planet not found');
             }
         } catch (error) {
-            throw new Error("wtf.");
+            if (error instanceof NotFoundError) {
+                throw new NotFoundError('planet not found');
+            }
+            throw new UnexpectedError('database error')
         }
     }
 
@@ -66,22 +72,28 @@ export class KnexPlanetRepository implements IPlanetRepository {
         try {
             const updatedRows = await knex('planets').where('id', id).update({ ...other });
             if (updatedRows === 0) {
-                throw new Error("Method not implemented.");
+                throw new NotFoundError('planet not found');
             }
             return this.getById(planetToUpdate.id)
         } catch (error) {
-            throw new Error("Method not implemented.");
+            if (error instanceof NotFoundError) {
+                throw new NotFoundError('planet not found');
+            }
+            throw new UnexpectedError('database error')
         }
     }
     delete = async (id: number): Promise<void> => {
         try {
             const deletedRows = await knex('planets').where('id', id).del();
             if (deletedRows === 0) {
-                throw new Error("Method not implemented.");
+                throw new NotFoundError('planet not found');
 
             }
         } catch (error) {
-            throw new Error("Method not implemented.");
+            if (error instanceof NotFoundError) {
+                throw new NotFoundError('planet not found');
+            }
+            throw new UnexpectedError('database error')
         }
     }
 }

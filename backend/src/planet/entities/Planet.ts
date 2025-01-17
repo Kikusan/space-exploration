@@ -2,7 +2,7 @@ interface Planet {
     id: number,
     name: string,
     isHabitable: boolean,
-    description: string,
+    description?: string,
     image: Image
 }
 
