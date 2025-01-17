@@ -2,7 +2,8 @@ import { Request, Response } from 'express';
 import IAstronautService from './interfaces/IAstronautService';
 import AstronautToCreate from "./entities/AstronautToCreate";
 import AstronautToUpdate from './entities/AstronautToUpdate';
-import ErrorWithStatus from '../common/errorWithStatus';
+import NotfoundError from '../common/notFoundError';
+import UnexpectedError from '../common/unexpectedError';
 import Astronaut from './entities/Astronaut';
 export class AstronautController {
     private readonly astronautService: IAstronautService;
@@ -14,9 +15,8 @@ export class AstronautController {
             const astronauts: Astronaut[] = await this.astronautService.getAll()
             res.status(200).json(astronauts);
         } catch (error) {
-            console.log(error)
-            if (error instanceof ErrorWithStatus) {
-                res.status(error.statusCode).json({ error: error.message })
+            if (error instanceof UnexpectedError) {
+                res.status(500).json({ error: error.message })
             } else {
                 res.status(500).json({ error: 'Internal Server Error' })
             }
@@ -31,9 +31,10 @@ export class AstronautController {
             const astronaut: Astronaut = await this.astronautService.getById(idToGet)
             res.status(200).json(astronaut);
         } catch (error) {
-            console.log(error)
-            if (error instanceof ErrorWithStatus) {
-                res.status(error.statusCode).json({ error: error.message })
+            if (error instanceof NotfoundError) {
+                res.status(404).json({ error: error.message })
+            } else if (error instanceof UnexpectedError) {
+                res.status(500).json({ error: error.message })
             } else {
                 res.status(500).json({ error: 'Internal Server Error' })
             }
@@ -51,9 +52,8 @@ export class AstronautController {
             const astronaut = await this.astronautService.create(astronautToCreate)
             res.status(201).json(astronaut);
         } catch (error) {
-            console.log(error)
-            if (error instanceof ErrorWithStatus) {
-                res.status(error.statusCode).json({ error: error.message })
+            if (error instanceof UnexpectedError) {
+                res.status(500).json({ error: error.message })
             } else {
                 res.status(500).json({ error: 'Internal Server Error' })
             }
@@ -73,9 +73,10 @@ export class AstronautController {
             const astronaut = await this.astronautService.update(astronautToUpdate)
             res.status(200).json(astronaut);
         } catch (error) {
-            console.log(error)
-            if (error instanceof ErrorWithStatus) {
-                res.status(error.statusCode).json({ error: error.message })
+            if (error instanceof NotfoundError) {
+                res.status(404).json({ error: error.message })
+            } else if (error instanceof UnexpectedError) {
+                res.status(500).json({ error: error.message })
             } else {
                 res.status(500).json({ error: 'Internal Server Error' })
             }
@@ -88,11 +89,12 @@ export class AstronautController {
 
             const idToDelete = parseInt(id)
             const astronaut = await this.astronautService.delete(idToDelete)
-            res.status(200).json(astronaut);
+            res.status(204).json(astronaut);
         } catch (error) {
-            console.log(error)
-            if (error instanceof ErrorWithStatus) {
-                res.status(error.statusCode).json({ error: error.message })
+            if (error instanceof NotfoundError) {
+                res.status(404).json({ error: error.message })
+            } else if (error instanceof UnexpectedError) {
+                res.status(500).json({ error: error.message })
             } else {
                 res.status(500).json({ error: 'Internal Server Error' })
             }

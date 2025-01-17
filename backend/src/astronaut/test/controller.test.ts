@@ -1,24 +1,16 @@
 import { Request, Response } from 'express';
 import { AstronautController } from './../controller';
 import { AstronautService } from './../service';
-import IAstronautRepository from "./../interfaces/IAstronautRepository";
-import Astronaut from './../entities/Astronaut';
+import { FakeAstronautRepository } from './fakeRepository';
+import AstronautToCreate from '../entities/AstronautToCreate';
 
-describe('AstronautController - getAll', () => {
-    const mockAstronauts: Astronaut[] = [
-        { id: 1, firstname: 'John', lastname: 'Doe', originPlanet: { id: 1, name: 'Earth' } },
-        { id: 2, firstname: 'Jane', lastname: 'Smith', originPlanet: { id: 1, name: 'Earth' } },
-    ];
-    const mockRepository: jest.Mocked<IAstronautRepository> = {
-        getAll: jest.fn(() => Promise.resolve(mockAstronauts)),
-        getById: jest.fn((id: number) => Promise.resolve({ id: 1, firstname: 'John', lastname: 'Doe', originPlanet: { id: 1, name: 'Earth' } })),
-        create: jest.fn(),
-        update: jest.fn(),
-        delete: jest.fn(),
-    }
-
-    const astronautService = new AstronautService(mockRepository)
+describe('AstronautController', () => {
+    const fakeRepository = new FakeAstronautRepository()
+    const astronautService = new AstronautService(fakeRepository)
     const astronautController = new AstronautController(astronautService);
+    const fakeRepositoryWithError = new FakeAstronautRepository(true)
+    const astronautServiceWithError = new AstronautService(fakeRepositoryWithError)
+    const astronautControllerWithError = new AstronautController(astronautServiceWithError);
     let req: Partial<Request>;
     let res: Partial<Response>;
     beforeEach(() => {
@@ -30,58 +22,105 @@ describe('AstronautController - getAll', () => {
             json: jest.fn(),
         };
     });
+    describe('GET /astronauts', () => {
+        it('should return a list of astronauts with status 200', async () => {
+            await astronautController.getAll(req as Request, res as Response);
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith(fakeRepository.astronauts);
+        });
 
-    it('should return a list of astronauts with status 200', async () => {
-        await astronautController.getAll(req as Request, res as Response);
-        expect(mockRepository.getAll).toHaveBeenCalledTimes(1);
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith(mockAstronauts);
-    });
+        it('should return status 500 and error message if an unexpected error occurs', async () => {
+            await astronautControllerWithError.getAll(req as Request, res as Response);
 
-    it('should return status 500 and error message if an unexpected error occurs', async () => {
-        // Arrange
-        const errorMessage = 'Internal Server Error';
-        mockRepository.getAll.mockRejectedValue(new Error(errorMessage));
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({ error: 'database error' });
+        });
+    })
 
-        // Act
-        await astronautController.getAll(req as Request, res as Response);
+    describe('GET /astronauts/:id', () => {
+        it('should return an astronaut with status 200', async () => {
+            req = { params: { id: "2" } }
+            const expectedResult = { id: 2, firstname: 'Jane', lastname: 'Smith', originPlanet: { id: 1, name: 'Planet 1' } }
+            await astronautController.getById(req as Request, res as Response);
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith(expectedResult);
+        });
+        it('should return astronaut not found with status 404 when astronaut not found', async () => {
+            req = { params: { id: "2000" } }
+            await astronautController.getById(req as Request, res as Response);
+            expect(res.status).toHaveBeenCalledWith(404);
+            expect(res.json).toHaveBeenCalledWith({ error: 'astronaut not found' });
+        });
 
-        // Assert
-        expect(res.status).toHaveBeenCalledWith(500);
-        expect(res.json).toHaveBeenCalledWith({ error: errorMessage });
-    });
+        it('should return database error with status 500 when database is down', async () => {
+            req = { params: { id: "2" } }
+            await astronautControllerWithError.getById(req as Request, res as Response);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({ error: 'database error' });
+        });
+    })
 
-    it('should return a list of astronauts with status 200', async () => {
-        req = { params: { id: "1" } }
-        await astronautController.getById(req as Request, res as Response);
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith(mockAstronauts[0]);
-    });
-    // it('should return status 500 and error message if an unexpected error occurs', async () => {
-    //     // Arrange
-    //     const errorMessage = 'Internal Server Error';
-    //     astronautServiceMock.getAll.mockRejectedValue(new Error(errorMessage));
+    describe('POST /astronauts', () => {
 
-    //     // Act
-    //     await astronautController.getAll(req as Request, res as Response);
+        it('should return a list of astronauts with status 201', async () => {
+            req = { body: { firstname: 'Marcel', lastname: 'Dupont', originPlanetId: '3' } }
+            const expectedResult = { id: 3, firstname: 'Marcel', lastname: 'Dupont', originPlanet: { id: 3, name: 'Planet 3' } }
+            await astronautController.create(req as Request, res as Response);
+            expect(res.status).toHaveBeenCalledWith(201);
+            expect(res.json).toHaveBeenCalledWith(expectedResult);
+        });
 
-    //     // Assert
-    //     expect(astronautServiceMock.getAll).toHaveBeenCalledTimes(1);
-    //     expect(res.status).toHaveBeenCalledWith(500);
-    //     expect(res.json).toHaveBeenCalledWith({ error: errorMessage });
-    // });
+        it('should return status 500 and error message if an unexpected error occurs', async () => {
+            req = { body: { firstname: 'Marcel', lastname: 'Dupont', originPlanetId: '3' } }
+            await astronautControllerWithError.create(req as Request, res as Response);
 
-    // it('should return a specific error message and status if ErrorWithStatus is thrown', async () => {
-    //     // Arrange
-    //     const customError = { statusCode: 400, message: 'Bad Request' };
-    //     astronautServiceMock.getAll.mockRejectedValue(customError);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({ error: 'database error' });
+        });
+    })
 
-    //     // Act
-    //     await astronautController.getAll(req as Request, res as Response);
+    describe('PUT /astronauts/:id', () => {
+        it('should return an astronaut with status 200', async () => {
+            req = { params: { id: "2" }, body: { firstname: 'Marcel', lastname: 'Dupont', originPlanetId: '3' } }
+            const expectedResult = { id: 2, firstname: 'Marcel', lastname: 'Dupont', originPlanet: { id: 3, name: 'Planet 3' } }
+            await astronautController.update(req as Request, res as Response);
+            expect(res.status).toHaveBeenCalledWith(200);
+            expect(res.json).toHaveBeenCalledWith(expectedResult);
+        });
+        it('should return astronaut not found with status 404 when astronaut not found', async () => {
+            req = { params: { id: "2000" }, body: { firstname: 'Marcel', lastname: 'Dupont', originPlanetId: '3' } }
+            await astronautController.getById(req as Request, res as Response);
+            expect(res.status).toHaveBeenCalledWith(404);
+            expect(res.json).toHaveBeenCalledWith({ error: 'astronaut not found' });
+        });
 
-    //     // Assert
-    //     expect(astronautServiceMock.getAll).toHaveBeenCalledTimes(1);
-    //     expect(res.status).toHaveBeenCalledWith(customError.statusCode);
-    //     expect(res.json).toHaveBeenCalledWith({ error: customError.message });
-    // });
+        it('should return database error with status 500 when database is down', async () => {
+            req = { params: { id: "2" }, body: { firstname: 'Marcel', lastname: 'Dupont', originPlanetId: '3' } }
+            await astronautControllerWithError.getById(req as Request, res as Response);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({ error: 'database error' });
+        });
+    })
+
+    describe('DELETE /astronauts/:id', () => {
+        it('should return an astronaut with status 304', async () => {
+            req = { params: { id: "2" } }
+            await astronautController.delete(req as Request, res as Response);
+            expect(res.status).toHaveBeenCalledWith(204);
+            expect(res.json).toHaveBeenCalledWith(undefined);
+        });
+        it('should return astronaut not found with status 404 when astronaut not found', async () => {
+            req = { params: { id: "2000" } }
+            await astronautController.delete(req as Request, res as Response);
+            expect(res.status).toHaveBeenCalledWith(404);
+            expect(res.json).toHaveBeenCalledWith({ error: 'astronaut not found' });
+        });
+
+        it('should return database error with status 500 when database is down', async () => {
+            req = { params: { id: "2" } }
+            await astronautControllerWithError.delete(req as Request, res as Response);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.json).toHaveBeenCalledWith({ error: 'database error' });
+        });
+    })
 });

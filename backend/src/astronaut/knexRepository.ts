@@ -4,6 +4,8 @@ import AstronautToUpdate from "./entities/AstronautToUpdate";
 import AstronautToCreate from "./entities/AstronautToCreate";
 import IAstronautRepository from "./interfaces/IAstronautRepository";
 import knex from "../db";
+import NotFoundError from "../common/notFoundError";
+import UnexpectedError from "../common/unexpectedError";
 
 export class KnexAstronautRepository implements IAstronautRepository {
     private knexResultToAstronaut(knexResult: KnexResult): Astronaut {
@@ -27,7 +29,7 @@ export class KnexAstronautRepository implements IAstronautRepository {
                 .map((knexResult: KnexResult) => this.knexResultToAstronaut(knexResult));
             return astronauts
         } catch (error) {
-            throw new Error('internal server error')
+            throw new UnexpectedError('database error')
         }
     }
     getById = async (id: number): Promise<Astronaut> => {
@@ -35,16 +37,17 @@ export class KnexAstronautRepository implements IAstronautRepository {
             const knexResult = await knex('astronauts').select('astronauts.*', 'planets.name', 'planets.id as planetId')
                 .join('planets', 'planets.id', '=', 'astronauts.originPlanetId')
                 .where('astronauts.id', id).first();
-            if (knexResult) {
-                const updatedAstronaut: Astronaut = this.knexResultToAstronaut(knexResult);
-                return updatedAstronaut
-
-            } else {
-                throw new Error("not found.");
+            if (!knexResult) {
+                throw new NotFoundError('astronaut not found');
             }
+            const updatedAstronaut: Astronaut = this.knexResultToAstronaut(knexResult);
+            return updatedAstronaut
 
         } catch (error) {
-            throw new Error("wtf.");
+            if (error instanceof NotFoundError) {
+                throw new NotFoundError('astronaut not found');
+            }
+            throw new UnexpectedError('database error')
         }
     }
 
@@ -54,7 +57,7 @@ export class KnexAstronautRepository implements IAstronautRepository {
             return this.getById(astronautCreated[0])
 
         } catch (error) {
-            throw new Error("Method not implemented.");
+            throw new UnexpectedError('database error')
         }
     }
     update = async (astronautToUpdate: AstronautToUpdate): Promise<Astronaut> => {
@@ -62,22 +65,27 @@ export class KnexAstronautRepository implements IAstronautRepository {
         try {
             const updatedRows = await knex('astronauts').where('id', id).update({ firstname, lastname, originPlanetId });
             if (updatedRows === 0) {
-                throw new Error("Method not implemented.");
+                throw new NotFoundError('astronaut not found');
             }
             return this.getById(astronautToUpdate.id)
         } catch (error) {
-            throw new Error("Method not implemented.");
+            if (error instanceof NotFoundError) {
+                throw new NotFoundError('astronaut not found');
+            }
+            throw new UnexpectedError('database error')
         }
     }
     delete = async (id: number): Promise<void> => {
         try {
             const deletedRows = await knex('astronauts').where('id', id).del();
             if (deletedRows === 0) {
-                throw new Error("Method not implemented.");
-
+                throw new NotFoundError('astronaut not found');
             }
         } catch (error) {
-            throw new Error("Method not implemented.");
+            if (error instanceof NotFoundError) {
+                throw new NotFoundError('astronaut not found');
+            }
+            throw new UnexpectedError('database error')
         }
     }
 }
