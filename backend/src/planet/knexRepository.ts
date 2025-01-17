@@ -42,7 +42,11 @@ export class KnexPlanetRepository implements IPlanetRepository {
     }
     getById = async (id: number): Promise<Planet> => {
         try {
-            const knexResult = await knex('planets').where('id', id).first();
+            const knexResult = await knex('planets')
+                .select('planets.*', 'images.path', 'images.name as imageName')
+                .join('images', 'images.id', '=', 'planets.imageId')
+                .where('planets.id', id)
+                .first();
             if (knexResult) {
                 const updatedPlanet: Planet = this.knexResultToPlanet(knexResult);
                 return updatedPlanet
@@ -51,6 +55,7 @@ export class KnexPlanetRepository implements IPlanetRepository {
                 throw new NotFoundError('planet not found');
             }
         } catch (error) {
+            console.log(error)
             if (error instanceof NotFoundError) {
                 throw new NotFoundError('planet not found');
             }
