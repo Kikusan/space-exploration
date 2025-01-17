@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
-import { AstronautController } from './controller';
-import { AstronautService } from './service';
-import IAstronautRepository from "./interface/IAstronautRepository";
-import Astronaut from './entities/Astronaut';
+import { AstronautController } from './../controller';
+import { AstronautService } from './../service';
+import IAstronautRepository from "./../interfaces/IAstronautRepository";
+import Astronaut from './../entities/Astronaut';
 
 describe('AstronautController - getAll', () => {
     const mockAstronauts: Astronaut[] = [

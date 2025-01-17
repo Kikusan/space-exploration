@@ -6,7 +6,8 @@
     "dev": "nodemon server.ts",
     "start": "ts-node server.ts",
     "migrate": "knex migrate:latest",
-    "seed": "knex seed:run"
+    "seed": "knex seed:run",
+    "test": "jest --watch"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
