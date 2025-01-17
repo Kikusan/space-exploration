@@ -6,6 +6,7 @@ import IAstronautRepository from "./interfaces/IAstronautRepository";
 import knex from "../db";
 import NotFoundError from "../common/notFoundError";
 import UnexpectedError from "../common/unexpectedError";
+import Filter from "./entities/Filter";
 
 export class KnexAstronautRepository implements IAstronautRepository {
     private knexResultToAstronaut(knexResult: KnexResult): Astronaut {
@@ -20,12 +21,16 @@ export class KnexAstronautRepository implements IAstronautRepository {
             },
         }
     }
-    getAll = async (): Promise<Astronaut[]> => {
+    getAll = async (filter?: Filter): Promise<Astronaut[]> => {
         try {
-            const astronauts: Astronaut[] = (await knex('astronauts')
+            const getAllQuery = knex('astronauts')
                 .select('astronauts.*', 'planets.name', 'planets.id as planetId')
                 .join('planets', 'planets.id', '=', 'astronauts.originPlanetId')
-                .join('images', 'images.id', '=', 'planets.imageId'))
+                .join('images', 'images.id', '=', 'planets.imageId')
+            if (filter) {
+                getAllQuery.limit(filter.pageSize).offset((filter.page - 1) * filter.pageSize);
+            }
+            const astronauts: Astronaut[] = (await getAllQuery)
                 .map((knexResult: KnexResult) => this.knexResultToAstronaut(knexResult));
             return astronauts
         } catch (error) {

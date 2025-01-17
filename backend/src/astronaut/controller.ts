@@ -5,14 +5,24 @@ import AstronautToUpdate from './entities/AstronautToUpdate';
 import NotfoundError from '../common/notFoundError';
 import UnexpectedError from '../common/unexpectedError';
 import Astronaut from './entities/Astronaut';
+import Filter from './entities/Filter';
 export class AstronautController {
     private readonly astronautService: IAstronautService;
     constructor(astronautService: IAstronautService) {
         this.astronautService = astronautService;
     }
     getAll = async (req: Request, res: Response) => {
+        const page: string | undefined = req.query?.page?.toString();
+        const pageSize: string | undefined = req.query?.pageSize?.toString();
+        let filter: Filter | undefined = undefined
+        if (page && pageSize) {
+            filter = {
+                page: parseInt(page),
+                pageSize: parseInt(pageSize)
+            }
+        }
         try {
-            const astronauts: Astronaut[] = await this.astronautService.getAll()
+            const astronauts: Astronaut[] = await this.astronautService.getAll(filter)
             res.status(200).json(astronauts);
         } catch (error) {
             if (error instanceof UnexpectedError) {

@@ -1,6 +1,7 @@
 import Astronaut from "./entities/Astronaut";
 import AstronautToCreate from "./entities/AstronautToCreate";
 import AstronautToUpdate from "./entities/AstronautToUpdate";
+import Page from "./entities/Filter";
 import IAstronautRepository from "./interfaces/IAstronautRepository";
 import IAstronautService from "./interfaces/IAstronautService";
 
@@ -9,8 +10,8 @@ export class AstronautService implements IAstronautService {
     constructor(astronautRepository: IAstronautRepository) {
         this.astronautRepository = astronautRepository
     }
-    getAll = async (): Promise<Astronaut[]> => {
-        const astronauts = await this.astronautRepository.getAll();
+    getAll = async (page?: Page): Promise<Astronaut[]> => {
+        const astronauts = await this.astronautRepository.getAll(page);
         return astronauts;
     }
     getById = async (id: number): Promise<Astronaut> => {
