@@ -44,7 +44,6 @@ services:
       DB_USER: eleven
       DB_PASSWORD: eleven11
       DB_NAME: eleven
-      CHOKIDAR_USEPOLLING: "true"
     volumes:
       - ./backend:/app/
       - /app/node_modules
@@ -59,5 +58,3 @@ services:
       - /app/node_modules
     ports:
       - "3000:3000"
-    environment:
-      CHOKIDAR_USEPOLLING: "true"
