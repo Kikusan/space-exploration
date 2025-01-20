@@ -1,5 +1,5 @@
 // React
-import { MouseEventHandler, FormEvent, useState, useEffect } from "react";
+import { MouseEventHandler, FormEvent, useState, useRef } from "react";
 
 // Libs
 import classnames from "classnames";
@@ -61,13 +61,17 @@ export function AstronautForm({
     currentPlanet?.isHabitable;
 
   const [formState, setFormState] = useState<FormStateType>({});
-  const [astronautFirstname, setAstronautFirstname] = useState("");
-  const [astronautLastname, setAstronautLastname] = useState("");
-  const [astronautOriginPlanet, setAstronautOriginPlanet] = useState("");
+
+  const firstnameRef = useRef<HTMLInputElement>(null);
+  const lastnameRef = useRef<HTMLInputElement>(null);
+  const originPlanetRef = useRef<HTMLInputElement>(null);
 
   const validateAndSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validationErrors: FormStateType = {};
+    const astronautFirstname = firstnameRef.current?.value;
+    const astronautLastname = lastnameRef.current?.value;
+    const astronautOriginPlanet = originPlanetRef.current?.value;
     if (astronautFirstname === "") {
       validationErrors.firstname = "firstname is required";
     }
@@ -77,7 +81,6 @@ export function AstronautForm({
     if (astronautOriginPlanet === "") {
       validationErrors.planet = "planet is require";
     }
-
     if (
       !Object.keys(validationErrors).length &&
       astronautFirstname &&
@@ -110,27 +113,18 @@ export function AstronautForm({
     );
   };
 
-  const handleChange = (selectedOption: AutoCompleteOptionType) => {
-    setAstronautOriginPlanet(selectedOption.value);
-  };
   const { selectedPlanetForSpaceTravel } = useSelectedPlanetForSpaceTravel();
-  useEffect(() => {
-    if (astronautForUpdate) {
-      const { firstname, lastname, originPlanet } = astronautForUpdate;
-      setAstronautFirstname(firstname);
-      setAstronautLastname(lastname);
-      setAstronautOriginPlanet(originPlanet?.id?.toString());
-    } else {
-      setAstronautOriginPlanet(
-        selectedPlanetForSpaceTravel?.id?.toString() ?? "",
-      );
-    }
-  }, [astronautForUpdate]);
 
   const astronautPlanet = () => {
     return {
-      label: astronautForUpdate?.originPlanet?.name ?? "",
-      value: astronautForUpdate?.originPlanet?.id?.toString() ?? "",
+      label:
+        astronautForUpdate?.originPlanet?.name ??
+        selectedPlanetForSpaceTravel?.name ??
+        "",
+      value:
+        astronautForUpdate?.originPlanet?.id?.toString() ??
+        selectedPlanetForSpaceTravel?.id?.toString() ??
+        "",
     };
   };
 
@@ -154,7 +148,7 @@ export function AstronautForm({
             required
             defaultValue={astronautForUpdate?.firstname ?? ""}
             error={formState.firstname}
-            onChange={(e) => setAstronautFirstname(e.target.value)}
+            ref={firstnameRef}
           />
           <HUDInput
             name="lastname"
@@ -163,7 +157,7 @@ export function AstronautForm({
             required
             defaultValue={astronautForUpdate?.lastname ?? ""}
             error={formState.lastname}
-            onChange={(e) => setAstronautLastname(e.target.value)}
+            ref={lastnameRef}
           />
           {mode !== "create" ? (
             <HUDAutoComplete
@@ -172,7 +166,7 @@ export function AstronautForm({
               placeholder="Tapez pour rechercher..."
               fetchOptions={fetchOptions}
               defaultValue={astronautPlanet()}
-              onChange={handleChange}
+              ref={originPlanetRef}
               error={undefined}
             />
           ) : null}

@@ -26,10 +26,7 @@ import {
 } from "../../contexts/SpaceTravelContext.tsx";
 
 // API
-import {
-  getPlanetListFromAPI,
-  GetPlanetListAPIResponse,
-} from "../../api/planet.api";
+import { getPlanetListFromAPI } from "../../api/planet.api";
 
 // SVG
 import IconSpaceship from "../../assets/icon-spaceship.svg?react";
