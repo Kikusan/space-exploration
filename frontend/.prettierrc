@@ -9,5 +9,6 @@
   "proseWrap": "never",
   "htmlWhitespaceSensitivity": "strict",
   "endOfLine": "lf",
-  "eslintIntegration": true
+  "eslintIntegration": true,
+  "singleQuote": true
 }

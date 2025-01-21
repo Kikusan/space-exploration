@@ -75,8 +75,8 @@ export const getPlanetListByNameHandler = http.get(
   ({ params }) => {
     const filteredList = params.name
       ? mockPlanetList.filter((planet) =>
-        planet.name.includes(params.name as string),
-      )
+          planet.name.includes(params.name as string),
+        )
       : mockPlanetList;
 
     return HttpResponse.json(filteredList);

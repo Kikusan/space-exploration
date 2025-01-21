@@ -1,42 +1,42 @@
 // React
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 // Libs
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 // Components
-import { Space } from "../../components/Space";
-import { Flexbox } from "../../components/Flexbox";
-import { HUDButton } from "../../components/HUDButton";
-import { Perspective } from "../../components/Perspective";
-import { PlanetListErrorBoundary } from "./PlanetListErrorBoundary";
+import { Space } from '../../components/Space';
+import { Flexbox } from '../../components/Flexbox';
+import { HUDButton } from '../../components/HUDButton';
+import { Perspective } from '../../components/Perspective';
+import { PlanetListErrorBoundary } from './PlanetListErrorBoundary';
 
 // Containers
-import { PlanetSelectionContainer } from "./PlanetSelectionContainer";
-import { CurrentPlanetContainer } from "./CurrentPlanetContainer";
-import { TravelContainer } from "./TravelContainer";
+import { PlanetSelectionContainer } from './PlanetSelectionContainer';
+import { CurrentPlanetContainer } from './CurrentPlanetContainer';
+import { TravelContainer } from './TravelContainer';
 
 // Hooks
-import { useFetch } from "../../hooks/useFetch";
+import { useFetch } from '../../hooks/useFetch';
 
 // Context
 import {
   usePlanetList,
   useIsTraveling,
-} from "../../contexts/SpaceTravelContext.tsx";
+} from '../../contexts/SpaceTravelContext.tsx';
 
 // API
-import { getPlanetListFromAPI } from "../../api/planet.api";
+import { getPlanetListFromAPI } from '../../api/planet.api';
 
 // SVG
-import IconSpaceship from "../../assets/icon-spaceship.svg?react";
+import IconSpaceship from '../../assets/icon-spaceship.svg?react';
 
 // Styles
-import styles from "./Cockpit.module.css";
+import styles from './Cockpit.module.css';
 
 export function Cockpit() {
   const navigate = useNavigate();
-  const handleNavigateToSpaceshipAdminPage = () => navigate("/spaceship-admin");
+  const handleNavigateToSpaceshipAdminPage = () => navigate('/spaceship-admin');
 
   const { isLoading, data, error } = useFetch(getPlanetListFromAPI);
   const { setPlanetList } = usePlanetList();

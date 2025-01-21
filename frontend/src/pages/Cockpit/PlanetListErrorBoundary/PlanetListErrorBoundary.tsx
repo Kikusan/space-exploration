@@ -1,19 +1,16 @@
-// Libs
 import { ReactNode } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-// Components
 import { HUDWindowError } from '../../../components/HUDWindowError';
 import { Perspective } from '../../../components/Perspective';
 
-// Styles
 import styles from './PlanetListErrorBoundary.module.css';
 
 function HUDPlanetListError() {
   return (
     <Perspective
       value="900px"
-      transform="rotateY(40deg)"
+      transform="rotateY(20deg)"
       className={styles.planetlisterrorboundary}
     >
       <HUDWindowError
@@ -24,7 +21,9 @@ function HUDPlanetListError() {
   );
 }
 
-export function PlanetListErrorBoundary({ children }: { children: ReactNode }) {
+export function PlanetListErrorBoundary({
+  children,
+}: Readonly<{ children: ReactNode }>) {
   return (
     <ErrorBoundary FallbackComponent={HUDPlanetListError}>
       {children}

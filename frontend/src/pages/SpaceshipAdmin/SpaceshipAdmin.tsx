@@ -1,40 +1,40 @@
 // React
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 // Libs
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 // Components
-import { Flexbox } from "../../components/Flexbox";
-import { AstronautListErrorBoundary } from "./AstronautListErrorBoundary";
+import { Flexbox } from '../../components/Flexbox';
+import { AstronautListErrorBoundary } from './AstronautListErrorBoundary';
 
 // Containers
-import { AstronautListContainer } from "./AstronautListContainer";
-import { SpaceshipAdminHeaderContainer } from "./SpaceshipAdminHeaderContainer";
+import { AstronautListContainer } from './AstronautListContainer';
+import { SpaceshipAdminHeaderContainer } from './SpaceshipAdminHeaderContainer';
 
 // Hooks
-import { useFetch } from "../../hooks/useFetch";
+import { useFetch } from '../../hooks/useFetch';
 
 // API
 import {
   getAstronautListFromAPI,
   GetAstronautListAPIResponse,
-} from "../../api/astronaut.api";
+} from '../../api/astronaut.api';
 
 // Context
-import { useAstronautList } from "../../contexts/SpaceshipContext.tsx";
+import { useAstronautList } from '../../contexts/SpaceshipContext.tsx';
 
 // Styles
-import styles from "./SpaceshipAdmin.module.css";
+import styles from './SpaceshipAdmin.module.css';
 
 export function SpaceshipAdmin() {
   const navigate = useNavigate();
 
-  const handleNavigateToCockpit = () => navigate("/");
+  const handleNavigateToCockpit = () => navigate('/');
   const handleNavigateToCreateOrEditAstronaut = (astronautId?: number) =>
     astronautId
       ? navigate(`/astronaut/edit/${astronautId}`)
-      : navigate("/astronaut/create");
+      : navigate('/astronaut/create');
 
   const { isLoading, data, error } = useFetch(getAstronautListFromAPI);
   const { setAstronautList } = useAstronautList();

@@ -1,19 +1,19 @@
 // React
-import { CSSProperties } from "react";
+import { CSSProperties } from 'react';
 
 // Libs
-import classnames from "classnames";
+import classnames from 'classnames';
 
 // Components
-import { HUDWindow } from "../HUDWindow";
-import { HUDListItem } from "../HUDListItem";
-import { Flexbox } from "../Flexbox";
+import { HUDWindow } from '../HUDWindow';
+import { HUDListItem } from '../HUDListItem';
+import { Flexbox } from '../Flexbox';
 
 // SVG
-import IconPlanetSVG from "../../assets/icon-planet.svg?react";
+import IconPlanetSVG from '../../assets/icon-planet.svg?react';
 
 // Styles
-import styles from "./HUDPlanetList.module.css";
+import styles from './HUDPlanetList.module.css';
 
 export type PlanetForList = {
   id: number;
@@ -26,7 +26,7 @@ type PlanetListProps = {
   className?: string;
   emptyPlanetListMessage: string;
   label?: string;
-  onClick?: ((planet: Pick<PlanetForList, "id" | "name">) => void) | null;
+  onClick?: ((planet: Pick<PlanetForList, 'id' | 'name'>) => void) | null;
   planetList?: PlanetForList[];
   style?: CSSProperties;
 };
@@ -69,7 +69,7 @@ export function HUDPlanetList({
 
             return (
               <HUDListItem
-                key={planetName}
+                key={id}
                 hasBorder={!isLastElement}
                 onClick={handlePlanetClick}
                 className={styles.planetlistItem}

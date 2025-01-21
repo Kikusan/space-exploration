@@ -55,7 +55,6 @@ export class KnexPlanetRepository implements IPlanetRepository {
                 throw new NotFoundError('planet not found');
             }
         } catch (error) {
-            console.log(error)
             if (error instanceof NotFoundError) {
                 throw new NotFoundError('planet not found');
             }

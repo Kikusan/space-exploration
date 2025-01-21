@@ -6,14 +6,14 @@ import {
   ReactNode,
   useMemo,
   useCallback,
-} from "react";
+} from 'react';
 
 // Error
-import { FetchError } from "../errors/FetchError";
-import { ContextError } from "../errors/ContextError";
+import { FetchError } from '../errors/FetchError';
+import { ContextError } from '../errors/ContextError';
 
 // API
-import { Astronaut } from "../api/astronaut.api";
+import { Astronaut } from '../api/astronaut.api';
 
 type SpaceshipContextType = {
   astronautList: {
@@ -72,8 +72,8 @@ export function useSpaceshipContext(): SpaceshipContextType {
 
   if (!spaceshipContext) {
     throw new ContextError(
-      "SpaceshipContext",
-      "no SpaceshipContext available, is the Provider was set?",
+      'SpaceshipContext',
+      'no SpaceshipContext available, is the Provider was set?',
     );
   }
 
@@ -81,16 +81,16 @@ export function useSpaceshipContext(): SpaceshipContextType {
 }
 
 export function useAstronautList(): {
-  astronautList: SpaceshipContextType["astronautList"];
+  astronautList: SpaceshipContextType['astronautList'];
   setAstronautList: (
-    astronautList: SpaceshipContextType["astronautList"],
+    astronautList: SpaceshipContextType['astronautList'],
   ) => void;
 } {
   const { astronautList, updateSpaceshipContext } = useSpaceshipContext();
 
   return {
     astronautList,
-    setAstronautList: (astronautList: SpaceshipContextType["astronautList"]) =>
+    setAstronautList: (astronautList: SpaceshipContextType['astronautList']) =>
       updateSpaceshipContext({ astronautList }),
   };
 }
