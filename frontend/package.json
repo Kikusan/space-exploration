@@ -43,6 +43,7 @@
     "vite": "4.4.5",
     "vite-plugin-pwa": "0.16.7",
     "vite-plugin-svgr": "^4.1.0",
+    "vite-tsconfig-paths": "^5.1.4",
     "vitest": "0.34.6"
   },
   "msw": {

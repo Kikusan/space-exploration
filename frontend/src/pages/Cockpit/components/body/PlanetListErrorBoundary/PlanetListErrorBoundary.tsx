@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { HUDWindowError } from '../../../components/HUDWindowError';
-import { Perspective } from '../../../components/Perspective';
+import { HUDWindowError } from '@components/HUDWindowError';
+import { Perspective } from '@components/Perspective';
 
 import styles from './PlanetListErrorBoundary.module.css';
 

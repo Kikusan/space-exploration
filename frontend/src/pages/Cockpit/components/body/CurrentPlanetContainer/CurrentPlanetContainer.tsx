@@ -1,11 +1,11 @@
 // Components
-import { HUDPlanetDescription } from '../../../components/HUDPlanetDescription';
+import { HUDPlanetDescription } from '@components/HUDPlanetDescription';
 
 // Context
 import {
   useCurrentPlanet,
   useIsTraveling,
-} from '../../../contexts/SpaceTravelContext.tsx';
+} from '@contexts/SpaceTravelContext.tsx';
 
 // Styles
 import styles from './CurrentPlanetContainer.module.css';

@@ -1,25 +1,19 @@
 // React
 import { CSSProperties } from 'react';
-
-// Components
-import { HUDButton } from '../../../components/HUDButton';
-
-// Helper
-import { waitMs } from '../helper';
-
-// Context
+import { HUDButton } from '@components/HUDButton';
+import { waitMs } from '@helpers/waitMs';
 import {
   useSelectedPlanetForSpaceTravel,
   useIsTraveling,
   useCurrentPlanet,
-} from '../../../contexts/SpaceTravelContext.tsx';
-import { useMessageCenter } from '../../../contexts/MessageCenterContext.tsx';
+} from '@contexts/SpaceTravelContext.tsx';
+import { useMessageCenter } from '@contexts/MessageCenterContext.tsx';
 
 type TravelContainerProps = {
   style?: CSSProperties;
 };
 
-export function TravelContainer({ style }: TravelContainerProps) {
+export function TravelContainer({ style }: Readonly<TravelContainerProps>) {
   const { selectedPlanetForSpaceTravel, setSelectedPlanetForSpaceTravel } =
     useSelectedPlanetForSpaceTravel();
   const { isTraveling, setIsTraveling } = useIsTraveling();

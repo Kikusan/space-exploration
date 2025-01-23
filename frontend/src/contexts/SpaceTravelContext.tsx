@@ -135,11 +135,15 @@ export function usePlanetList(): {
   setPlanetList: (planetList: SpaceTravelContextType['planetList']) => void;
 } {
   const { planetList, updateSpaceTravelContext } = useSpaceTravelContext();
-
-  const newLocal = (planetList: SpaceTravelContextType['planetList']) =>
-    updateSpaceTravelContext({ planetList });
+  const setPlanetList = useCallback(
+    (planetListFromSpaceTravelContext: SpaceTravelContextType['planetList']) =>
+      updateSpaceTravelContext({
+        planetList: planetListFromSpaceTravelContext,
+      }),
+    [updateSpaceTravelContext],
+  );
   return {
     planetList,
-    setPlanetList: newLocal,
+    setPlanetList,
   };
 }

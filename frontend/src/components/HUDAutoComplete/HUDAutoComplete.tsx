@@ -15,7 +15,7 @@ import classnames from 'classnames';
 import { HUDListItem } from '../HUDListItem';
 
 // Helper
-import { waitMs } from '../../pages/Cockpit/helper';
+import { waitMs } from '../../helpers/waitMs';
 
 // Hooks
 import { useFetch } from '../../hooks/useFetch';

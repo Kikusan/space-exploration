@@ -1,24 +1,14 @@
-// Components
-import { Perspective } from '../../../components/Perspective';
-import {
-  HUDPlanetList,
-  PlanetForList,
-} from '../../../components/HUDPlanetList';
-import { HUDWindowLoader } from '../../../components/HUDWindowLoader';
-
-// Context
+import { Perspective } from '@components/Perspective';
+import { HUDPlanetList, PlanetForList } from '@components/HUDPlanetList';
+import { HUDWindowLoader } from '@components/HUDWindowLoader';
 import {
   useCurrentPlanet,
-  usePlanetList,
   useSelectedPlanetForSpaceTravel,
-} from '../../../contexts/SpaceTravelContext.tsx';
-import { useMessageCenter } from '../../../contexts/MessageCenterContext.tsx';
-
-// Types
-import { NoWhere, Planet } from '../../../api/planet.api';
-
-// Styles
+} from '@contexts/SpaceTravelContext.tsx';
+import { useMessageCenter } from '@contexts/MessageCenterContext.tsx';
+import { NoWhere, Planet } from '@api/planet.api';
 import styles from './PlanetSelectionContainer.module.css';
+import { useFetchPlanet } from '../../../hooks/useFetchPlanet';
 
 function mapPlanetListForHUDPlanetListComponent(
   planetList?: Planet[] | null,
@@ -38,10 +28,8 @@ function mapPlanetListForHUDPlanetListComponent(
 }
 
 export function PlanetSelectionContainer() {
-  const {
-    planetList: { isLoading, planetList, error },
-  } = usePlanetList();
-  const { currentPlanet, setCurrentPlanet } = useCurrentPlanet();
+  const { data, error } = useFetchPlanet();
+  const { currentPlanet } = useCurrentPlanet();
   const { selectedPlanetForSpaceTravel, setSelectedPlanetForSpaceTravel } =
     useSelectedPlanetForSpaceTravel();
   const { pushErrorMessage } = useMessageCenter();
@@ -54,10 +42,9 @@ export function PlanetSelectionContainer() {
   const handleSelectPlanetForTravel = (
     selectedPlanet: Pick<PlanetForList, 'id' | 'name'>,
   ) => {
-    planetList?.forEach((planet: Planet) => {
+    data?.forEach((planet: Planet) => {
       if (planet.id === selectedPlanet.id) {
         setSelectedPlanetForSpaceTravel(planet);
-        setCurrentPlanet(planet);
       }
     });
   };
@@ -68,7 +55,7 @@ export function PlanetSelectionContainer() {
       transform="rotateY(40deg)"
       className={styles.planetselectioncontainer}
     >
-      {isLoading ? (
+      {!data ? (
         <HUDWindowLoader
           label="planet list for travel"
           className="planetselectioncontainerLoader"
@@ -76,7 +63,7 @@ export function PlanetSelectionContainer() {
       ) : (
         <HUDPlanetList
           planetList={mapPlanetListForHUDPlanetListComponent(
-            planetList,
+            data,
             currentPlanet,
             selectedPlanetForSpaceTravel,
           )}
