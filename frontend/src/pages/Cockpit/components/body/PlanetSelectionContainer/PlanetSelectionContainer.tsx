@@ -1,5 +1,5 @@
 import { Perspective } from '@components/Perspective';
-import { HUDPlanetList, PlanetForList } from '@components/HUDPlanetList';
+import { HUDPlanetList, PlanetForList } from './HUDPlanetList';
 import { HUDWindowLoader } from '@components/HUDWindowLoader';
 import {
   useCurrentPlanet,

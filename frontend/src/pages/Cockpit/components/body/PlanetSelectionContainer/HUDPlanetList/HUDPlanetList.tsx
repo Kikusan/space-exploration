@@ -5,12 +5,12 @@ import { CSSProperties } from 'react';
 import classnames from 'classnames';
 
 // Components
-import { HUDWindow } from '../HUDWindow';
-import { HUDListItem } from '../HUDListItem';
-import { Flexbox } from '../Flexbox';
+import { HUDWindow } from '@components/HUDWindow';
+import { HUDListItem } from '@components/HUDListItem';
+import { Flexbox } from '@components/Flexbox';
 
 // SVG
-import IconPlanetSVG from '../../assets/icon-planet.svg?react';
+import IconPlanetSVG from '@assets/icon-planet.svg?react';
 
 // Styles
 import styles from './HUDPlanetList.module.css';

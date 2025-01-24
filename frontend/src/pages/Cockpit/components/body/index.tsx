@@ -1,23 +1,12 @@
-// React
-import { Flexbox } from '@components/Flexbox/index';
-import { PlanetListErrorBoundary } from './PlanetListErrorBoundary';
-
-import { PlanetSelectionContainer } from './PlanetSelectionContainer';
-import { CurrentPlanetContainer } from './CurrentPlanetContainer';
-
 import { FetchPlanetProvider } from '../../context/FetchPlanetContext.tsx';
 import { PlanetService } from '../../service/planetService';
+import { BodyContainer } from './BodyContainer.tsx';
 
-export function PlanetList() {
+export function Body() {
   const planetService = new PlanetService();
   return (
-    <Flexbox flex="2 1 auto" alignItems="center">
-      <FetchPlanetProvider service={planetService}>
-        <PlanetListErrorBoundary>
-          <PlanetSelectionContainer />
-        </PlanetListErrorBoundary>
-        <CurrentPlanetContainer />
-      </FetchPlanetProvider>
-    </Flexbox>
+    <FetchPlanetProvider service={planetService}>
+      <BodyContainer />
+    </FetchPlanetProvider>
   );
 }

@@ -9,7 +9,7 @@
     "lint": "eslint --ext ts,tsx --report-unused-disable-directives --max-warnings 0 && prettier . --check && tsc",
     "format": "eslint --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix && prettier . --write",
     "preview": "vite preview",
-    "test": "vitest",
+    "test": "vitest --reporter verbose --watch",
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {

@@ -8,7 +8,7 @@ vi.mock('@assets/icon-spaceship.svg?react', () => ({
   default: 'svg',
 }));
 
-describe('Header component', () => {
+describe('Cockpit header component', () => {
   it('should navigate to spaceship-admin page when the button is clicked', () => {
     render(
       <Router>

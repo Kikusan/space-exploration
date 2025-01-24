@@ -12,7 +12,7 @@ type PlanetImage = {
 export type Planet = {
   id: number;
   name: string;
-  description: string;
+  description: string | null;
   image: PlanetImage;
   isHabitable: boolean;
 };
