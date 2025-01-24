@@ -26,7 +26,7 @@ export function TravelContainer({ style }: Readonly<TravelContainerProps>) {
     );
     setIsTraveling(true);
     setCurrentPlanet('NO_WHERE');
-    await waitMs(5000);
+    await waitMs(1000);
     if (selectedPlanetForSpaceTravel) {
       setCurrentPlanet(selectedPlanetForSpaceTravel);
       setSelectedPlanetForSpaceTravel(undefined);

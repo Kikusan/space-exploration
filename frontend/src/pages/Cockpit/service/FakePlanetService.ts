@@ -19,7 +19,7 @@ export class FakePlanetService implements IPlanetService {
       'isHabitable': false,
       'description': 'description 4',
       'image': {
-        'path': '/assets/donut_factory.jpg',
+        'path': '/assets/pouloulou.jpg',
         'name': 'Donut Factory Image',
       },
     },
@@ -47,7 +47,6 @@ export class FakePlanetService implements IPlanetService {
       'id': 8,
       'name': 'Kikusan world',
       'isHabitable': true,
-      'description': null,
       'image': {
         'path': '/assets/raccoon_asgards.jpg',
         'name': 'Raccoon from Asgard Image',

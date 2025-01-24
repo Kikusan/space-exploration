@@ -2,7 +2,7 @@ import { Flexbox } from '@components/Flexbox';
 import { Perspective } from '@components/Perspective';
 import { TravelContainer } from './TravelContainer';
 
-import styles from '../../Cockpit.module.css';
+import styles from '../../../Cockpit.module.css';
 export function Footer() {
   return (
     <Flexbox

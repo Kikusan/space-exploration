@@ -29,7 +29,7 @@ export function HUDPlanetDescription({
   label,
   name,
   style,
-}: PlanetDescriptionProps) {
+}: Readonly<PlanetDescriptionProps>) {
   return (
     <div className={className} style={style}>
       {label && (

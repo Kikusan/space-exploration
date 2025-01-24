@@ -5,11 +5,12 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    setupFiles: ['./setupTests.ts'],
     coverage: {
       provider: 'istanbul', // Utilise 'c8' pour la couverture, d'autres options existent
       reporter: ['text', 'json', 'html'], // Choisissez les formats de rapport
       include: ['src/**/*.ts', 'src/**/*.tsx'],
-      exclude: ['**/browser.ts',] // Spécifiez les fichiers à inclure
+      exclude: ['**/browser.ts'], // Spécifiez les fichiers à inclure
     },
   },
   resolve: {

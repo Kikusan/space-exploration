@@ -6,7 +6,6 @@ import { useIsTraveling } from '../../contexts/SpaceTravelContext.tsx';
 import styles from './Cockpit.module.css';
 import { Header } from './components/header/index.tsx';
 import { Body } from './components/body/index.tsx';
-import { Footer } from './components/footer/index.tsx';
 
 export function Cockpit() {
   const { isTraveling } = useIsTraveling();
@@ -15,7 +14,6 @@ export function Cockpit() {
       <Space isHyperSpace={isTraveling} className={styles.cockpitSpace} />
       <Header />
       <Body />
-      <Footer />
     </Flexbox>
   );
 }
