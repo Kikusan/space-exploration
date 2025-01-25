@@ -1,5 +1,5 @@
 // Components
-import { HUDPlanetDescription } from '@components/HUDPlanetDescription';
+import { HUDPlanetDescription } from '../HUDPlanetDescription';
 
 // Context
 import {

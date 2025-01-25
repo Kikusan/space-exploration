@@ -2,11 +2,11 @@
 import { CSSProperties } from 'react';
 
 // Components
-import { HUDWindow } from '../HUDWindow';
-import { Flexbox } from '../Flexbox';
+import { HUDWindow } from '@components/HUDWindow';
+import { Flexbox } from '@components/Flexbox';
 
 // SVG
-import IconMaleFemale from '../../assets/icon-male-female.svg?react';
+import IconMaleFemale from '@assets/icon-male-female.svg?react';
 
 // Styles
 import styles from './HUDPlanetDescription.module.css';

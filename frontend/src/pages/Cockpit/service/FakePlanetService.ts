@@ -17,10 +17,10 @@ export class FakePlanetService implements IPlanetService {
       'id': 11,
       'name': 'pouloulou',
       'isHabitable': false,
-      'description': 'description 4',
+      'description': 'Mi pou pooooou',
       'image': {
         'path': '/assets/pouloulou.jpg',
-        'name': 'Donut Factory Image',
+        'name': 'pouloulou Image',
       },
     },
     {

@@ -5,7 +5,6 @@ import { BodyContainer } from './BodyContainer.tsx';
 import { FakePlanetService } from '../../service/FakePlanetService';
 import userEvent from '@testing-library/user-event';
 import { SpaceTravelProvider } from '@contexts/SpaceTravelContext.tsx';
-import { waitMs } from '@helpers/waitMs.ts';
 
 vi.mock('@assets/icon-planet.svg?react', () => ({
   default: 'svg',
@@ -55,22 +54,39 @@ describe('cockpit body component', () => {
     expect(hyperspace).not.toBeDisabled();
   });
 
-  it('should travel to the selectionned planet on hyperspace click', async () => {
-    render(
-      <SpaceTravelProvider>
-        <FetchPlanetProvider service={planetService}>
-          <BodyContainer />
-        </FetchPlanetProvider>
-      </SpaceTravelProvider>,
-    );
-    const planet = await screen.findByText('pouloulou');
-    await userEvent.click(planet);
-    const hyperspace = screen.getByRole('button');
-    await userEvent.click(hyperspace);
-    await act(async () => {
-      await waitMs(1000);
-    });
-    const planetImg = screen.getByRole('img');
-    expect(planetImg).toHaveAttribute('src', '/assets/pouloulou.jpg');
-  });
+  it.each([
+    {
+      name: 'Donut Factory',
+      img: '/assets/donut_factory.jpg',
+      description: 'Forte en calories',
+      life: 'shelters life',
+    },
+    {
+      name: 'pouloulou',
+      img: '/assets/pouloulou.jpg',
+      description: 'Mi pou pooooou',
+      life: 'No life on this planet',
+    },
+  ])(
+    'should display data of $name on hyperspace click',
+    async ({ name, img, description, life }) => {
+      render(
+        <SpaceTravelProvider>
+          <FetchPlanetProvider service={planetService}>
+            <BodyContainer />
+          </FetchPlanetProvider>
+        </SpaceTravelProvider>,
+      );
+      const planet = await screen.findByText(name);
+      await userEvent.click(planet);
+      const hyperspace = screen.getByRole('button');
+      await userEvent.click(hyperspace);
+      const planetImg = await screen.findByRole('img');
+      expect(planetImg).toHaveAttribute('src', img);
+      const planetDescription = await screen.findByText(description);
+      expect(planetDescription).toBeInTheDocument();
+      const lifePlanet = await screen.findByText(life);
+      expect(lifePlanet).toBeInTheDocument();
+    },
+  );
 });
