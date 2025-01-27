@@ -60,7 +60,7 @@ export function CreateOrEditAstronaut() {
 
   return (
     <Flexbox flexDirection="column" className={styles.createoreditastronaut}>
-      {currentPlanet === 'NO_WHERE' ? (
+      {!currentPlanet ? (
         <HUDWindowWarning
           warning="current planet: UnKnow"
           className={styles.createoreditastronautCurrentPlanetWarning}

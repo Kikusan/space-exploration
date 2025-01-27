@@ -18,7 +18,7 @@ import { NoWhere, Planet } from '../api/planet.api';
 type SpaceTravelContextType = {
   isTraveling: boolean;
   selectedPlanetForSpaceTravel?: Planet;
-  currentPlanet: Planet | NoWhere;
+  currentPlanet?: Planet;
   planetList: {
     isLoading: boolean;
     planetList?: Planet[] | null;
@@ -31,7 +31,7 @@ type SpaceTravelContextType = {
 
 const initialSpaceTravelContext: SpaceTravelContextType = {
   isTraveling: false,
-  currentPlanet: 'NO_WHERE',
+  currentPlanet: undefined,
   planetList: {
     isLoading: false,
   },

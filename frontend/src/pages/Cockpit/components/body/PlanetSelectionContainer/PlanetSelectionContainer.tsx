@@ -6,13 +6,13 @@ import {
   useSelectedPlanetForSpaceTravel,
 } from '@contexts/SpaceTravelContext.tsx';
 import { useMessageCenter } from '@contexts/MessageCenterContext.tsx';
-import { NoWhere, Planet } from '@api/planet.api';
+import { Planet } from '@api/planet.api';
 import styles from './PlanetSelectionContainer.module.css';
 import { useFetchPlanet } from '../../../hooks/useFetchPlanet';
 
 function mapPlanetListForHUDPlanetListComponent(
   planetList?: Planet[] | null,
-  currentPlanet?: Planet | NoWhere,
+  currentPlanet?: Planet,
   selectedPlanet?: Planet,
 ): PlanetForList[] {
   if (!planetList) {
@@ -22,7 +22,7 @@ function mapPlanetListForHUDPlanetListComponent(
   return planetList.map(({ id, name }: Planet) => ({
     id,
     name,
-    isCurrent: currentPlanet === 'NO_WHERE' ? false : currentPlanet?.id === id,
+    isCurrent: currentPlanet?.id === id,
     isActive: selectedPlanet?.id === id,
   }));
 }

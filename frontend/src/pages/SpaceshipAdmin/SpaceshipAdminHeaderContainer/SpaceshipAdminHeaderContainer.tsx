@@ -37,10 +37,10 @@ export function SpaceshipAdminHeaderContainer({
           <div>return to cockpit</div>
         </Flexbox>
       </HUDButton>
-      {currentPlanet === 'NO_WHERE' ? (
+      {!currentPlanet ? (
         <HUDWindowWarning
           className={styles.spaceshipadminheaderPlanetWarning}
-          warning="current planet: Unknow"
+          warning="current planet: Unknown"
         />
       ) : (
         <HUDPlanetDescription

@@ -14,7 +14,7 @@ export function CurrentPlanetContainer() {
   const { currentPlanet } = useCurrentPlanet();
   const { isTraveling } = useIsTraveling();
 
-  if (currentPlanet === 'NO_WHERE' || isTraveling) {
+  if (!currentPlanet || isTraveling) {
     return null;
   }
 

@@ -55,10 +55,7 @@ export function AstronautForm({
 }: Readonly<AstronautFormProps>) {
   const componentClassNames = classnames(styles.astronautform, className);
   const { currentPlanet } = useCurrentPlanet();
-  const canCreate =
-    mode === 'create' &&
-    currentPlanet !== 'NO_WHERE' &&
-    currentPlanet?.isHabitable;
+  const canCreate = mode === 'create' && currentPlanet?.isHabitable;
 
   const [formState, setFormState] = useState<FormStateType>({});
 
@@ -74,10 +71,7 @@ export function AstronautForm({
     const astronautLastname = lastnameRef.current?.value;
     let astronautOriginPlanet = originPlanetRef.current?.value;
     if (mode === 'create') {
-      astronautOriginPlanet =
-        currentPlanet !== 'NO_WHERE'
-          ? currentPlanet?.id?.toString()
-          : undefined;
+      astronautOriginPlanet = currentPlanet?.id?.toString();
     }
     if (astronautFirstname === '') {
       validationErrors.firstname = 'firstname is required';

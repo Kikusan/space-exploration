@@ -25,7 +25,7 @@ export function TravelContainer({ style }: Readonly<TravelContainerProps>) {
       `Space Travel to ${selectedPlanetForSpaceTravel?.name} planet in progress ...`,
     );
     setIsTraveling(true);
-    setCurrentPlanet('NO_WHERE');
+    setCurrentPlanet(undefined);
     await waitMs(1000);
     if (selectedPlanetForSpaceTravel) {
       setCurrentPlanet(selectedPlanetForSpaceTravel);

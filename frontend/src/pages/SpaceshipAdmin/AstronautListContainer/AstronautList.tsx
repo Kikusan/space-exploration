@@ -1,9 +1,5 @@
 // Components
 import { HUDAstronautList } from './components/HUDAstronautList';
-import { HUDWindowLoader } from '@components/HUDWindowLoader/index';
-
-// Context
-import { useMessageCenter } from '@contexts/MessageCenterContext.tsx';
 
 import styles from './AstronautListContainer.module.css';
 

@@ -17,8 +17,6 @@ export type Planet = {
   isHabitable: boolean;
 };
 
-export type NoWhere = 'NO_WHERE';
-
 export type GetPlanetListAPIResponse = Planet[];
 
 export function getPlanetListFromAPI<GetPlanetListAPIResponse>(
