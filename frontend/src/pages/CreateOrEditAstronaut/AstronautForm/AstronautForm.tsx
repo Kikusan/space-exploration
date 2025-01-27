@@ -29,8 +29,8 @@ import styles from './AstronautForm.module.css';
 import {
   AutoCompleteOptionType,
   HUDAutoComplete,
-} from '../../../components/HUDAutoComplete/index.ts';
-import { Planet } from '../../../api/planet.api.ts';
+} from '../../../components/HUDAutoComplete';
+import { Planet } from '../../../api/planet.api';
 
 type AstronautFormProps = {
   astronautForUpdate?: Astronaut | null;
@@ -64,14 +64,21 @@ export function AstronautForm({
 
   const firstnameRef = useRef<HTMLInputElement>(null);
   const lastnameRef = useRef<HTMLInputElement>(null);
-  const originPlanetRef = useRef<HTMLInputElement>(null);
+  const originPlanetRef = useRef<HTMLInputElement>();
 
   const validateAndSubmit = (e: FormEvent<HTMLFormElement>) => {
+    console.log('enculé');
     e.preventDefault();
     const validationErrors: FormStateType = {};
     const astronautFirstname = firstnameRef.current?.value;
     const astronautLastname = lastnameRef.current?.value;
-    const astronautOriginPlanet = originPlanetRef.current?.value;
+    let astronautOriginPlanet = originPlanetRef.current?.value;
+    if (mode === 'create') {
+      astronautOriginPlanet =
+        currentPlanet !== 'NO_WHERE'
+          ? currentPlanet?.id?.toString()
+          : undefined;
+    }
     if (astronautFirstname === '') {
       validationErrors.firstname = 'firstname is required';
     }
@@ -81,12 +88,14 @@ export function AstronautForm({
     if (astronautOriginPlanet === '') {
       validationErrors.planet = 'planet is require';
     }
+    console.log(astronautFirstname, astronautLastname, astronautOriginPlanet);
     if (
       !Object.keys(validationErrors).length &&
       astronautFirstname &&
       astronautLastname &&
       astronautOriginPlanet
     ) {
+      console.log('??');
       onSubmit({
         firstname: astronautFirstname,
         lastname: astronautLastname,

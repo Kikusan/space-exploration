@@ -10,7 +10,6 @@ import { HUDWindowLoader } from '../../components/HUDWindowLoader';
 
 // API
 import {
-  Astronaut,
   createAstronautAPICall,
   CreateUpdateAstronautRequestBody,
   getOneAstronautFromAPI,
@@ -34,6 +33,7 @@ export function CreateOrEditAstronaut() {
   const handleAstronautFormCreate = async (
     astronaut: CreateUpdateAstronautRequestBody,
   ) => {
+    console.log('nique ta mere');
     await createAstronautAPICall(astronaut);
     navigate('/spaceship-admin');
   };
@@ -55,7 +55,7 @@ export function CreateOrEditAstronaut() {
   const fetchAstronaut = useMemo(() => {
     return (options?: RequestInit) =>
       getOneAstronautFromAPI(astronautId, options);
-  }, []);
+  }, [astronautId]);
   const { isLoading, data } = useFetch(fetchAstronaut);
 
   return (

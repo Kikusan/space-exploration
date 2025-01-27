@@ -13,10 +13,10 @@ import styles from './SpaceshipAdminHeaderContainer.module.css';
 // SVG
 import IconChevronLeft from '../../../assets/icon-chevron-left.svg?react';
 
-type SpaceshipAdminHeaderContainerProps = {
+type SpaceshipAdminHeaderContainerProps = Readonly<{
   handleNavigateToCockpit: () => void;
   handleNavigateToCreateOrEditAstronaut: (astronautId?: number) => void;
-};
+}>;
 
 export function SpaceshipAdminHeaderContainer({
   handleNavigateToCockpit,

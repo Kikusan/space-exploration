@@ -1,7 +1,3 @@
-// React
-import { useEffect } from 'react';
-
-// Libs
 import { useNavigate } from 'react-router-dom';
 
 // Components
@@ -12,18 +8,6 @@ import { AstronautListErrorBoundary } from './AstronautListErrorBoundary';
 import { AstronautListContainer } from './AstronautListContainer';
 import { SpaceshipAdminHeaderContainer } from './SpaceshipAdminHeaderContainer';
 
-// Hooks
-import { useFetch } from '../../hooks/useFetch';
-
-// API
-import {
-  getAstronautListFromAPI,
-  GetAstronautListAPIResponse,
-} from '../../api/astronaut.api';
-
-// Context
-import { useAstronautList } from '../../contexts/SpaceshipContext.tsx';
-
 // Styles
 import styles from './SpaceshipAdmin.module.css';
 
@@ -31,17 +15,8 @@ export function SpaceshipAdmin() {
   const navigate = useNavigate();
 
   const handleNavigateToCockpit = () => navigate('/');
-  const handleNavigateToCreateOrEditAstronaut = (astronautId?: number) =>
-    astronautId
-      ? navigate(`/astronaut/edit/${astronautId}`)
-      : navigate('/astronaut/create');
-
-  const { isLoading, data, error } = useFetch(getAstronautListFromAPI);
-  const { setAstronautList } = useAstronautList();
-
-  useEffect(() => {
-    setAstronautList({ isLoading, astronautList: data, error });
-  }, [data, error, isLoading]);
+  const handleNavigateToCreateOrEditAstronaut = () =>
+    navigate('/astronaut/create');
 
   return (
     <Flexbox className={styles.spaceshipadmin} flexDirection="column">
@@ -55,11 +30,7 @@ export function SpaceshipAdmin() {
       </Flexbox>
       <Flexbox justifyContent="center" alignItems="center">
         <AstronautListErrorBoundary>
-          <AstronautListContainer
-            handleNavigateToCreateOrEditAstronaut={
-              handleNavigateToCreateOrEditAstronaut
-            }
-          />
+          <AstronautListContainer />
         </AstronautListErrorBoundary>
       </Flexbox>
     </Flexbox>
