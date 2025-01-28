@@ -89,4 +89,20 @@ describe('cockpit body component', () => {
       expect(lifePlanet).toBeInTheDocument();
     },
   );
+
+  it('should display error message when service is down', async () => {
+    const planetServiceFailure = new FakePlanetService(true);
+
+    render(
+      <SpaceTravelProvider>
+        <FetchPlanetProvider service={planetServiceFailure}>
+          <BodyContainer />
+        </FetchPlanetProvider>
+      </SpaceTravelProvider>,
+    );
+    const errorText = await screen.findByText(
+      'FATAL ERROR: cannot load planet list from Eleven Labs space services.',
+    );
+    expect(errorText).toBeInTheDocument();
+  });
 });

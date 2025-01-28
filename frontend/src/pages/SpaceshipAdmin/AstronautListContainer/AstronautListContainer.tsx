@@ -3,10 +3,10 @@ import { HUDAstronautList } from './components/HUDAstronautList/index';
 
 import styles from './AstronautListContainer.module.css';
 import { FetchAstronautProvider } from '../contexts/astronautContext.tsx';
-import { FetchAstronautService } from '../services/AstronautService';
+import { AstronautService } from '../services/AstronautService';
 
 export function AstronautListContainer() {
-  const fetchAstronautService = new FetchAstronautService();
+  const fetchAstronautService = new AstronautService();
   return (
     <FetchAstronautProvider service={fetchAstronautService}>
       <HUDAstronautList

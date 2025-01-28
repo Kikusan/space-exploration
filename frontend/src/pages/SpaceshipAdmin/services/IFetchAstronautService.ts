@@ -1,4 +1,4 @@
-import { Astronaut } from '@api/astronaut.api';
+import { Astronaut } from './Astronaut';
 
 export default interface IAstronautService {
   fetchAstronauts(): Promise<Astronaut[]>;

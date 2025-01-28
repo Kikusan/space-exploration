@@ -15,13 +15,6 @@ import { useMessageCenter } from '@contexts/MessageCenterContext';
 import { useNavigate } from 'react-router-dom';
 import { Astronaut } from '@api/astronaut.api';
 
-export type AstronautForList = {
-  id: number;
-  firstname: string;
-  lastname: string;
-  planetOfOrigin: string;
-};
-
 type AstronautListProps = {
   className?: string;
   emptyAstronautListMessage: string;
@@ -54,8 +47,10 @@ export function HUDAstronautList({
     fetchData();
   }, [fetchAstronauts]);
 
-  const navigateToEditAstronaut = (astronautId: number) =>
+  const navigateToEditAstronaut = (astronautId: number) => {
     navigate(`/astronaut/edit/${astronautId}`);
+  };
+
   if (error) {
     pushErrorMessage('Eleven Labs space services are not online ...');
     throw new Error();

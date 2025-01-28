@@ -1,9 +1,9 @@
 import { Astronaut } from '@api/astronaut.api';
 import IFetchAstronautService from './IFetchAstronautService';
 
-export class FetchAstronautService implements IFetchAstronautService {
+export class AstronautService implements IFetchAstronautService {
   fetchAstronauts = async () => {
-    const response = await fetch(`http://${import.meta.env.VITE_API_URL}/astronauts`);
+    const response = await fetch(`http://${import.meta.env.VITE_API_URL}/astronuts`);
     if (!response.ok) throw new Error('Network response was not ok');
     return response.json();
   };

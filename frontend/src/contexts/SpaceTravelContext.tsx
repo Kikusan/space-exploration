@@ -13,7 +13,7 @@ import { FetchError } from '../errors/FetchError';
 import { ContextError } from '../errors/ContextError';
 
 // API
-import { NoWhere, Planet } from '../api/planet.api';
+import { Planet } from '../api/planet.api';
 
 type SpaceTravelContextType = {
   isTraveling: boolean;
@@ -42,9 +42,13 @@ const SpaceTravelContext = createContext(initialSpaceTravelContext);
 
 export function SpaceTravelProvider({
   children,
-}: Readonly<{ children: ReactNode }>) {
+  defaultCurrentPlanet,
+}: Readonly<{ children: ReactNode; defaultCurrentPlanet?: Planet }>) {
   const [spaceTravelState, setSpaceTravelState] =
-    useState<SpaceTravelContextType>(initialSpaceTravelContext);
+    useState<SpaceTravelContextType>({
+      ...initialSpaceTravelContext,
+      currentPlanet: defaultCurrentPlanet,
+    });
 
   const updateSpaceTravelContext = useCallback(
     (stateToUpdate: Partial<SpaceTravelContextType>) => {

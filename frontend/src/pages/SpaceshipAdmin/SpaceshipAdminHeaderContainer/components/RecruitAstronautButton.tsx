@@ -9,7 +9,7 @@ export function RecruitAstronautButton() {
     navigate('/astronaut/create');
   return (
     <>
-      {currentPlanet ? (
+      {currentPlanet?.isHabitable ? (
         <HUDButton onClick={() => handleNavigateToCreateOrEditAstronaut()}>
           Create Astronaut
         </HUDButton>

@@ -37,7 +37,11 @@ export function HUDPlanetDescription({
       )}
       <Flexbox justifyContent="space-around" alignItems="center">
         {imgSrc && (
-          <img src={imgSrc} className={styles.planetdescriptionImage} />
+          <img
+            src={imgSrc}
+            className={styles.planetdescriptionImage}
+            alt={name}
+          />
         )}
         <HUDWindow className={styles.planetdescriptionWindow}>
           <h3 className={styles.planetdescriptionName}>{name}</h3>

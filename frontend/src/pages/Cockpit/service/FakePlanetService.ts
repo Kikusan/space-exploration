@@ -2,6 +2,12 @@ import { Planet } from '@api/planet.api';
 import IPlanetService from './IPlanetService';
 
 export class FakePlanetService implements IPlanetService {
+  private readonly error: boolean = false;
+
+  constructor(error: boolean = false) {
+    this.error = error;
+  }
+
   readonly planets: Planet[] = [
     {
       'id': 1,
@@ -64,5 +70,10 @@ export class FakePlanetService implements IPlanetService {
     },
   ];
 
-  fetchPlanets = () => Promise.resolve(this.planets);
+  fetchPlanets = () => {
+    if (this.error) {
+      throw new Error('cheh');
+    }
+    return Promise.resolve(this.planets);
+  };
 }
