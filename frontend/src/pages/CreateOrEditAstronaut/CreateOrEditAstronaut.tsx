@@ -33,7 +33,6 @@ export function CreateOrEditAstronaut() {
   const handleAstronautFormCreate = async (
     astronaut: CreateUpdateAstronautRequestBody,
   ) => {
-    console.log('nique ta mere');
     await createAstronautAPICall(astronaut);
     navigate('/spaceship-admin');
   };

@@ -25,7 +25,7 @@ import {
 } from '../../../api/astronaut.api';
 
 // Styles
-import styles from './AstronautForm.module.css';
+import styles from '../AstronautForm.module.css';
 import {
   AutoCompleteOptionType,
   HUDAutoComplete,
@@ -61,7 +61,7 @@ export function AstronautForm({
 
   const firstnameRef = useRef<HTMLInputElement>(null);
   const lastnameRef = useRef<HTMLInputElement>(null);
-  const originPlanetRef = useRef<HTMLInputElement>();
+  const originPlanetRef = useRef<HTMLInputElement>(null);
 
   const validateAndSubmit = (e: FormEvent<HTMLFormElement>) => {
     console.log('enculé');

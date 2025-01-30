@@ -18,6 +18,10 @@
   margin-right: 10px;
 }
 
+.createoreditastronautForm {
+  min-width: 790px;
+}
+
 .astronautformCannotCreate {
   padding: 20px;
   text-align: center;

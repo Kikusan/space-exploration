@@ -1,14 +1,10 @@
 import React, { createContext, ReactNode, useCallback, useMemo } from 'react';
 import IfetchAstronautService from '../services/IFetchAstronautService';
-import { Astronaut } from '@api/astronaut.api';
+import { Astronaut } from '../services/Astronaut';
 
 export interface ApiContextType {
   fetchAstronauts: () => Promise<Astronaut[]>;
   deleteAstronaut: (id: number) => Promise<Astronaut[]>;
-  updateAstronaut: (
-    id: string,
-    updatedData: Partial<Astronaut>,
-  ) => Promise<void>;
 }
 
 interface ApiProviderProps {
@@ -17,9 +13,10 @@ interface ApiProviderProps {
 }
 
 export const FetchAstronautContext = createContext<ApiContextType>({
-  fetchAstronauts: async () => [],
-  deleteAstronaut: async () => [],
-  updateAstronaut: async () => {
+  fetchAstronauts: async () => {
+    throw new Error('Not implemented');
+  },
+  deleteAstronaut: async () => {
     throw new Error('Not implemented');
   },
 });
@@ -38,13 +35,9 @@ export const FetchAstronautProvider: React.FC<ApiProviderProps> = ({
     },
     [service],
   );
-  const updateAstronaut = async (id: string) => {
-    console.log('update', id);
-    Promise.resolve();
-  };
 
   const contextValue = useMemo(
-    () => ({ fetchAstronauts, deleteAstronaut, updateAstronaut }),
+    () => ({ fetchAstronauts, deleteAstronaut }),
     [fetchAstronauts, deleteAstronaut],
   );
   return (

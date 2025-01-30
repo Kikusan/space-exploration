@@ -13,7 +13,7 @@ import styles from './HUDAstronautList.module.css';
 import { useAstronaut } from '../../../hooks/useAstronauts';
 import { useMessageCenter } from '@contexts/MessageCenterContext';
 import { useNavigate } from 'react-router-dom';
-import { Astronaut } from '@api/astronaut.api';
+import { Astronaut } from '../../../services/Astronaut';
 
 type AstronautListProps = {
   className?: string;

@@ -40,10 +40,7 @@ export async function getOneAstronautFromAPI<Astronaut>(
   return fetchApi<Astronaut>(`/astronauts/${astronautId}`, options);
 }
 
-export type CreateUpdateAstronautRequestBody = Pick<
-  Astronaut,
-  'firstname' | 'lastname'
-> & { originPlanetId: number };
+export type CreateUpdateAstronautRequestBody = Pick<Astronaut, 'firstname' | 'lastname'> & { originPlanetId: number };
 
 export type CreateUpdateAstronautResponse = CreateUpdateAstronautRequestBody & {
   id: number;
