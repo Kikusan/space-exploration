@@ -42,15 +42,15 @@ export function useFetch(fetchFunction: FetchFunction, options?: Options) {
         const error =
           e instanceof Error
             ? new FetchError(
-                500,
-                e.message,
-                'An error occurred while fetching data',
-              )
+              500,
+              e.message,
+              'An error occurred while fetching data',
+            )
             : new FetchError(
-                500,
-                'Unknown error',
-                'An error occurred while fetching data',
-              );
+              500,
+              'Unknown error',
+              'An error occurred while fetching data',
+            );
         setState({
           data: null,
           error,
