@@ -1,24 +1,20 @@
-import { ChangeEvent, forwardRef, InputHTMLAttributes, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, forwardRef, InputHTMLAttributes, useEffect, useState } from 'react';
 import classnames from 'classnames';
 import { HUDListItem } from '@components/HUDListItem';
 import styles from './PlanetAutoComplete.module.css';
+import { PlanetItem } from '../../services/Planet';
 
 interface PlanetAutoCompleteProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'defaultValue'> {
   error?: string;
-  autoCompleteOptions: (searchTerm?: string) => AutoCompleteOptionType[];
+  autoCompleteOptions: (searchTerm?: string) => Promise<PlanetItem[]>;
   fieldLabel: string;
-  onChange?: (selectedOption: AutoCompleteOptionType) => void;
-  defaultValue: AutoCompleteOptionType;
+  onChange?: (selectedOption: PlanetItem) => void;
+  defaultValue: PlanetItem;
 }
 
-export type AutoCompleteOptionType = {
-  label: string;
-  value: string;
-};
-
 type AutoCompleteOptionsStateType = {
-  data: AutoCompleteOptionType[];
+  data: PlanetItem[];
   isVisible: boolean;
 };
 
@@ -57,19 +53,27 @@ export const PlanetAutoComplete = forwardRef<HTMLInputElement | null, PlanetAuto
       data: [],
       isVisible: false,
     });
-    const [selectedOption, setSelectedOption] = useState<AutoCompleteOptionType | null>();
-
-    const data = useMemo(() => autoCompleteOptions(), [autoCompleteOptions]);
+    const [selectedOption, setSelectedOption] = useState<PlanetItem | null>(defaultValue);
+    const [inputValue, setInputValue] = useState(selectedOption?.label ?? '');
+    const [isVisible, setIsVisible] = useState<boolean>(false);
 
     useEffect(() => {
-      setOptions({
-        data,
-        isVisible: false,
-      });
-    }, [data]);
+      if (!inputValue) {
+        setOptions({ data: [], isVisible });
+        return;
+      }
 
-    const handleOptionOnClick = (newOptionValue: AutoCompleteOptionType) => {
+      const handler = setTimeout(async () => {
+        const searchedList = await autoCompleteOptions(inputValue);
+        setOptions({ data: searchedList, isVisible });
+      }, 300);
+      return () => clearTimeout(handler);
+    }, [inputValue, autoCompleteOptions, isVisible]);
+
+    const handleOptionOnClick = (newOptionValue: PlanetItem) => {
       setSelectedOption(newOptionValue);
+      setInputValue(newOptionValue.label);
+      setIsVisible(false);
       if (onChange) {
         onChange(newOptionValue);
       }
@@ -77,21 +81,20 @@ export const PlanetAutoComplete = forwardRef<HTMLInputElement | null, PlanetAuto
 
     const handleInputOnChange = async (e: ChangeEvent<HTMLInputElement>) => {
       const searchTerm = e.target.value;
-      const searchedList = autoCompleteOptions(searchTerm);
-      setOptions({
-        data: searchedList,
-        isVisible: true,
-      });
+      setInputValue(searchTerm);
+      setIsVisible(true);
     };
 
     const handleVisibleOnFocus = () => {
-      setOptions({ ...options, isVisible: true });
+      setIsVisible(true);
+      setOptions({ ...options, isVisible });
     };
 
     const handleNotVisibleOnBlur = async () => {
       setTimeout(() => {
-        setOptions({ ...options, isVisible: false });
-      }, 100);
+        setIsVisible(false);
+        setOptions({ ...options, isVisible });
+      }, 150);
     };
 
     return (
@@ -99,7 +102,6 @@ export const PlanetAutoComplete = forwardRef<HTMLInputElement | null, PlanetAuto
         <input
           name={`${name}_value`}
           id={`${name}_value`}
-          defaultValue={defaultValue.value}
           value={selectedOption?.value}
           ref={ref}
           type="hidden"
@@ -111,11 +113,11 @@ export const PlanetAutoComplete = forwardRef<HTMLInputElement | null, PlanetAuto
           required={required}
           className={inputClassNames}
           placeholder={placeholder}
-          value={selectedOption?.label}
-          defaultValue={defaultValue.label}
+          value={inputValue}
           onChange={handleInputOnChange}
           onFocus={handleVisibleOnFocus}
           onBlur={handleNotVisibleOnBlur}
+          autoComplete="off"
         />
 
         <label htmlFor={name} className={labelClassNames}>
@@ -125,7 +127,7 @@ export const PlanetAutoComplete = forwardRef<HTMLInputElement | null, PlanetAuto
         {error && <div className={styles.hudautocompleteError}>{error}</div>}
         {options.isVisible && (
           <div className={optionsClassNames}>
-            {options.data?.map(({ label, value }: AutoCompleteOptionType) => (
+            {options.data.map(({ label, value }: PlanetItem) => (
               <HUDListItem key={`${value}`} hasBorder onClick={() => handleOptionOnClick({ label, value })}>
                 {label}
               </HUDListItem>

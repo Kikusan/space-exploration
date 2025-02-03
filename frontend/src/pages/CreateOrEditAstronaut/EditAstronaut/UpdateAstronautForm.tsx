@@ -10,11 +10,11 @@ import { Flexbox } from '@components/Flexbox';
 import { Astronaut } from '@api/astronaut.api';
 
 import styles from '../AstronautForm.module.css';
-import { AutoCompleteOptionType } from '@components/HUDAutoComplete';
 import { useNavigate } from 'react-router-dom';
 import { useUpdateAstronaut } from './hooks/useUpdateAstronaut';
 import { AstronautToUpdate } from './services/AstronautToUpdate';
 import { PlanetAutoComplete } from './components/PlanetAutoComplete';
+import { useFetchPlanet } from './hooks/useFetchPlanet';
 
 type AstronautFormProps = {
   astronautForUpdate: Astronaut;
@@ -31,6 +31,7 @@ export function UpdateAstronautForm({ astronautForUpdate }: Readonly<AstronautFo
   const navigate = useNavigate();
   const handleCancel = () => navigate('/spaceship-admin');
   const { updateAstronaut } = useUpdateAstronaut();
+  const { fetchPlanets } = useFetchPlanet();
   const handleAstronautFormSubmit = async (astronaut: AstronautToUpdate) => {
     await updateAstronaut(astronaut);
     navigate('/spaceship-admin');
@@ -65,7 +66,7 @@ export function UpdateAstronautForm({ astronautForUpdate }: Readonly<AstronautFo
       astronautOriginPlanet
     ) {
       handleAstronautFormSubmit({
-        id: 1,
+        id: astronautForUpdate.id,
         firstname: astronautFirstname,
         lastname: astronautLastname,
         originPlanetId: parseInt(astronautOriginPlanet),
@@ -75,116 +76,9 @@ export function UpdateAstronautForm({ astronautForUpdate }: Readonly<AstronautFo
     }
   };
 
-  const options = (searchTerm?: string): AutoCompleteOptionType[] => {
-    const planets = [
-      {
-        id: 1,
-        name: 'Donut Factory',
-        isHabitable: true,
-        description: 'Forte en calories',
-        image: {
-          path: '/assets/donut_factory.jpg',
-          name: 'Donut Factory Image',
-        },
-      },
-      {
-        id: 11,
-        name: 'pouloulou',
-        isHabitable: false,
-        description: 'description 4',
-        image: {
-          path: '/assets/donut_factory.jpg',
-          name: 'Donut Factory Image',
-        },
-      },
-      {
-        id: 12,
-        name: 'pouloulou',
-        isHabitable: true,
-        description: 'description 4',
-        image: {
-          path: '/assets/donut_factory.jpg',
-          name: 'Donut Factory Image',
-        },
-      },
-      {
-        id: 13,
-        name: 'pouloulou',
-        isHabitable: true,
-        description: 'description 4',
-        image: {
-          path: '/assets/donut_factory.jpg',
-          name: 'Donut Factory Image',
-        },
-      },
-      {
-        id: 2,
-        name: 'Duck Invaders',
-        isHabitable: true,
-        description: 'La danse ici est une religion',
-        image: {
-          path: '/assets/duck_invaders.jpg',
-          name: 'Duck Invaders Image',
-        },
-      },
-      {
-        id: 3,
-        name: 'Raccoon from Asgard',
-        isHabitable: true,
-        description: 'Espiegle mais pas trop',
-        image: {
-          path: '/assets/raccoon_asgards.jpg',
-          name: 'Raccoon from Asgard Image',
-        },
-      },
-      {
-        id: 5,
-        name: "Kikusan's world",
-        isHabitable: true,
-        description: null,
-        image: {
-          path: '/assets/raccoon_asgards.jpg',
-          name: 'Raccoon from Asgard Image',
-        },
-      },
-      {
-        id: 8,
-        name: "Kikusan's world 2",
-        isHabitable: true,
-        description: null,
-        image: {
-          path: '/assets/raccoon_asgards.jpg',
-          name: 'Raccoon from Asgard Image',
-        },
-      },
-      {
-        id: 4,
-        name: 'Schizo Cats',
-        isHabitable: true,
-        description: "Non leur planete n'est pas une pelote",
-        image: {
-          path: '/assets/schizo_cats.jpg',
-          name: 'Schizo Cats Image',
-        },
-      },
-    ];
-    const planetOptions = planets.map((planet) => ({
-      label: planet.name,
-      value: planet.id.toString(),
-    }));
-
-    return (
-      planetOptions?.filter((option) =>
-        option.label.toLowerCase().includes(searchTerm?.toLowerCase() ?? ''),
-      ) || []
-    );
-  };
-
-  const astronautPlanet = () => {
-    return {
-      label: astronautForUpdate.originPlanet.name,
-      value: astronautForUpdate.originPlanet.id.toString(),
-    };
+  const astronautPlanet = {
+    label: astronautForUpdate.originPlanet.name,
+    value: astronautForUpdate.originPlanet.id.toString(),
   };
 
   return (
@@ -215,8 +109,8 @@ export function UpdateAstronautForm({ astronautForUpdate }: Readonly<AstronautFo
             name="astronautOriginPlanet"
             fieldLabel="Astronaut origin planet"
             placeholder="Tapez pour rechercher..."
-            autoCompleteOptions={options}
-            defaultValue={astronautPlanet()}
+            autoCompleteOptions={fetchPlanets}
+            defaultValue={astronautPlanet}
             ref={originPlanetRef}
             error={undefined}
           />
