@@ -11,6 +11,7 @@ export class AstronautService implements IFetchAstronautService {
   deleteAstronaut = async (id: number): Promise<Astronaut[]> => {
     const response = await fetch(`http://${import.meta.env.VITE_API_URL}/astronauts/${id}`, { method: 'DELETE' });
     if (!response.ok) throw new Error('deletion failed');
-    return this.fetchAstronauts();
+    console.log(response);
+    return response.json();
   };
 }

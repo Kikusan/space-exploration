@@ -2,7 +2,6 @@ import React from 'react';
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { RecruitAstronaut } from './pages/CreateOrEditAstronaut/RecruitAstronaut';
 import { Cockpit } from './pages/Cockpit';
 import { SpaceshipAdmin } from './pages/SpaceshipAdmin';
 
@@ -11,7 +10,7 @@ import { MessageCenterContainer } from './MessageCenterContainer.tsx';
 import { SpaceTravelProvider } from './contexts/SpaceTravelContext.tsx';
 import { SpaceshipProvider } from './contexts/SpaceshipContext.tsx';
 import { MessageCenterProvider } from './contexts/MessageCenterContext.tsx';
-import { UpdateAstronaut } from './pages/CreateOrEditAstronaut/EditAstronaut';
+import { UpdateAstronaut, RecruitAstronaut } from './pages/CreateOrEditAstronaut';
 
 export function App() {
   const router = createBrowserRouter([
