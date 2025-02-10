@@ -1,6 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { ValidationPipe } from '@nestjs/common';
+
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,6 +19,12 @@ async function bootstrap() {
   app.enableCors({
     origin: process.env.FRONT_END_HOST,  // Permet les requêtes provenant de http://localhost:3000
   });
+
+  app.useGlobalPipes(new ValidationPipe({
+    transform: true, // Permet la transformation des données entrantes en type approprié
+    whitelist: true, // Ignore les propriétés non définies dans le DTO
+    forbidNonWhitelisted: true, // Renvoie une erreur 400 si des propriétés non autorisées sont envoyées
+  }));
   await app.listen(4000);
 }
 bootstrap();

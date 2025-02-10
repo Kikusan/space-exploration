@@ -1,7 +1,9 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { AstronautService } from './service';
 import { ApiTags } from '@nestjs/swagger';
 import { Astronaut } from './entities/astronaut.entity';
+import { RecruitAstronautDTO } from './dto/astronaut.dto';
+import { Recruit } from './domainObjects/recruit';
 
 @Controller('astronauts')
 @ApiTags('astronauts')
@@ -19,13 +21,23 @@ export class AstronautController {
   }
 
   @Post()
-  async RecruitAstronaut(@Body() recruit: Astronaut): Promise<Astronaut> {
-    return this.astronautService.recruitAstronaut(recruit);
+  async RecruitAstronaut(@Body() recruit: RecruitAstronautDTO): Promise<Astronaut> {
+    const newRecruit: Recruit = {
+      firstname: recruit.firstname,
+      lastname: recruit.lastname,
+    }
+    const planetId = recruit.originPlanet.id
+    return this.astronautService.recruitAstronaut(newRecruit, planetId);
   }
 
   @Put(':id')
   async UpdateAstronaut(@Body() updatedAstronaut: Astronaut): Promise<Astronaut> {
-    return this.astronautService.recruitAstronaut(updatedAstronaut);
+    return this.astronautService.updateAstronaut(updatedAstronaut);
+  }
+
+  @Delete(':id')
+  async fireAstronaut(@Param('id') id: string) {
+    return this.astronautService.fireAstronaut(id)
   }
 
 }
