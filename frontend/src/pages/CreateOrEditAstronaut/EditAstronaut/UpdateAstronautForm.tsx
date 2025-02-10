@@ -7,7 +7,7 @@ import { Form } from '@components/Form';
 import { HUDInput } from '@components/HUDInput';
 import { HUDButton } from '@components/HUDButton';
 import { Flexbox } from '@components/Flexbox';
-import { Astronaut } from '@api/astronaut.api';
+import { Astronaut } from './services/Astronaut';
 
 import styles from '../AstronautForm.module.css';
 import { useNavigate } from 'react-router-dom';
@@ -69,7 +69,7 @@ export function UpdateAstronautForm({ astronautForUpdate }: Readonly<AstronautFo
         id: astronautForUpdate.id,
         firstname: astronautFirstname,
         lastname: astronautLastname,
-        originPlanetId: parseInt(astronautOriginPlanet),
+        originPlanetId: astronautOriginPlanet,
       });
     } else {
       setFormState(validationErrors);

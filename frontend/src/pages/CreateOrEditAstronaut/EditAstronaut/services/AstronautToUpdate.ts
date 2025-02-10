@@ -1,6 +1,6 @@
 export type AstronautToUpdate = {
-  id: number;
+  id: string;
   firstname: string;
   lastname: string;
-  originPlanetId: number
+  originPlanetId: string
 };

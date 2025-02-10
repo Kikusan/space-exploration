@@ -16,7 +16,7 @@ export function UpdateAstronautContainer() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await getById(parseInt(astronautId!));
+        const response = await getById(astronautId!);
         setAstronaut(response);
       } catch (err) {
         console.error(err);
@@ -28,11 +28,7 @@ export function UpdateAstronautContainer() {
   return (
     <Flexbox flexDirection="column" className={styles.createoreditastronaut}>
       <Flexbox justifyContent="center" alignItems="center">
-        {!astronaut ? (
-          <HUDWindowLoader />
-        ) : (
-          <UpdateAstronautForm astronautForUpdate={astronaut} />
-        )}
+        {!astronaut ? <HUDWindowLoader /> : <UpdateAstronautForm astronautForUpdate={astronaut} />}
       </Flexbox>
     </Flexbox>
   );
