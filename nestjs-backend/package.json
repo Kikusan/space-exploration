@@ -6,7 +6,7 @@
     "build": "nest build",
     "start": "nest start",
     "start:dev": "nest start --watch",
-    "test": "jest",
+    "test": "jest --watch",
     "typeorm": "typeorm-ts-node-commonjs",
     "migration:run": "npm run typeorm migration:run -- -d typeorm.config.ts",
     "migration:generate": "npm run typeorm migration:generate -- -d typeorm.config.ts",
