@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { PlanetDto } from './planet.dto';
 
-class PlanetDto {
+export class ReadAstronautDTO {
   @ApiProperty({
     example: 'b7d21cf0-67d5-4db0-a1f7-eebd157fbb6f',
     description: 'UUID of the planet'
@@ -9,16 +10,6 @@ class PlanetDto {
   @IsNotEmpty()
   @IsUUID()
   readonly id: string;
-
-  @ApiProperty({
-    example: 'Earth',
-    description: 'Name of the planet',
-    required: false
-  })
-  readonly name?: string;
-}
-
-export class RecruitAstronautDTO {
   @ApiProperty({
     example: 'John',
     description: 'First name of the astronaut'

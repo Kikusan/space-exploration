@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Planet } from '../entities/planet.entity';
-import { IPlanetRepository } from './IPlanetRepository';
+import { Planet } from './entities/planet.entity';
+import { IPlanetRepository } from '../IPlanetRepository';
 
 @Injectable()
 export class TypeOrmPlanetRepository implements IPlanetRepository {

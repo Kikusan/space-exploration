@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDa
 import { Planet } from './planet.entity';
 
 @Entity('astronauts')
-export class Astronaut {
+export class TypeORMAstronaut {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

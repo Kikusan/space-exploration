@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
-import { Astronaut } from '../entities/astronaut.entity';
-import { IAstronautRepository } from './IAstronautRepository';
-
+import { IAstronautRepository } from '../IAstronautRepository';
+import { Recruit, Astronaut } from 'src/Astronauts/domainObjects';
 @Injectable()
 export class FakeAstronautRepository implements IAstronautRepository {
   constructor(
@@ -10,38 +9,29 @@ export class FakeAstronautRepository implements IAstronautRepository {
   astronauts: Astronaut[] = [
     {
       id: 'riri id',
-      createdAt: new Date('2025-02-12T10:16:21.593Z'),
-      updatedAt: new Date('2025-02-12T10:16:21.593Z'),
       firstname: 'riri',
       lastname: 'duck',
       originPlanet: {
         name: 'Moon',
         id: 'id',
-        astronauts: []
       }
     },
     {
       id: 'fifi id',
-      createdAt: new Date('2025-02-12T10:16:21.593Z'),
-      updatedAt: new Date('2025-02-12T10:16:21.593Z'),
       firstname: 'fifi',
       lastname: 'duck',
       originPlanet: {
         name: 'Moon',
         id: 'id',
-        astronauts: []
       }
     },
     {
       id: 'loulou id',
-      createdAt: new Date('2025-02-12T10:16:21.593Z'),
-      updatedAt: new Date('2025-02-12T10:16:21.593Z'),
       firstname: 'loulou',
       lastname: 'duck',
       originPlanet: {
         name: 'Moon',
         id: 'id',
-        astronauts: []
       }
     }
   ];
@@ -56,7 +46,14 @@ export class FakeAstronautRepository implements IAstronautRepository {
     return Promise.resolve(astronaut)
   }
 
-  async saveAstronaut(newAstronaut: Astronaut) {
+  async saveAstronaut(recruit: Recruit, planetId: string) {
+    const newAstronaut: Astronaut = {
+      ...recruit,
+      id: `${recruit.firstname} id`,
+      originPlanet: {
+        id: `planet ${planetId}`, name: 'planet'
+      }
+    }
     this.astronauts.push(newAstronaut);
     return Promise.resolve(newAstronaut)
   }

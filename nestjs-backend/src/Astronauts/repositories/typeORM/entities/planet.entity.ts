@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { Astronaut } from './astronaut.entity';
+import { TypeORMAstronaut } from './astronaut.entity';
 
 @Entity('planets')
 export class Planet {
@@ -12,6 +12,10 @@ export class Planet {
   @Column()
   name: string;
 
-  @OneToMany(() => Astronaut, (astronaut) => astronaut.originPlanet)
-  astronauts: Astronaut[];
+  @ApiProperty({ description: 'Planet habitable status' })
+  @Column({ name: 'isHabitable' })
+  isHabitable: boolean;
+
+  @OneToMany(() => TypeORMAstronaut, (astronaut) => astronaut.originPlanet)
+  astronauts: TypeORMAstronaut[];
 } 

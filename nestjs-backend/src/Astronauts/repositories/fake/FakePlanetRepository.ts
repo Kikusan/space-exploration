@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Planet } from '../entities/planet.entity';
-import { IPlanetRepository } from './IPlanetRepository';
+import { Planet } from '../typeORM/entities/planet.entity';
+import { IPlanetRepository } from '../IPlanetRepository';
 
 @Injectable()
 export class FakePlanetRepository implements IPlanetRepository {
@@ -9,6 +9,7 @@ export class FakePlanetRepository implements IPlanetRepository {
     const planet: Planet = {
       name: 'moon',
       id: 'id',
+      isHabitable: true,
       astronauts: []
     }
     return planet;

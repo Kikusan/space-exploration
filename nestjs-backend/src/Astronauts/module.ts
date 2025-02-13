@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AstronautController } from './controller';
-import { AstronautService } from './service';
+import { AstronautController } from './primaryAdapter/controller';
+import { AstronautService } from './services/service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Astronaut } from './entities/astronaut.entity';
-import { Planet } from './entities/planet.entity';
-import { TypeOrmAstronautRepository } from './repositories/TypeORMAstronautRepository';
-import { TypeOrmPlanetRepository } from './repositories/TypeORMPlanetRepository';
+import { TypeORMAstronaut } from './repositories/typeORM/entities/astronaut.entity';
+import { Planet } from './repositories/typeORM/entities/planet.entity';
+import { TypeOrmAstronautRepository } from './repositories/typeORM/TypeORMAstronautRepository';
+import { TypeOrmPlanetRepository } from './repositories/typeORM/TypeORMPlanetRepository';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
-      Astronaut, Planet
+      TypeORMAstronaut, Planet
     ]),
   ],
   controllers: [AstronautController],

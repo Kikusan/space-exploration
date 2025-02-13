@@ -1,9 +1,9 @@
 import { AstronautService } from './service';
-import { Astronaut } from './entities/astronaut.entity';
-import { Planet } from './entities/planet.entity';
-import { Recruit } from './domainObjects/recruit';
-import { FakeAstronautRepository } from './repositories/FakeAstronautRepository';
-import { FakePlanetRepository } from './repositories/FakePlanetRepository';
+import { TypeORMAstronaut } from '../repositories/typeORM/entities/astronaut.entity';
+import { Planet } from '../repositories/typeORM/entities/planet.entity';
+import { Recruit } from '../domainObjects/recruit';
+import { FakeAstronautRepository } from '../repositories/fake/FakeAstronautRepository';
+import { FakePlanetRepository } from '../repositories/fake/FakePlanetRepository';
 
 describe('AstronautService', () => {
 
@@ -24,14 +24,11 @@ describe('AstronautService', () => {
   it('should get an astronaut by ID', async () => {
     const expectedResult = {
       id: 'riri id',
-      createdAt: new Date('2025-02-12T10:16:21.593Z'),
-      updatedAt: new Date('2025-02-12T10:16:21.593Z'),
       firstname: 'riri',
       lastname: 'duck',
       originPlanet: {
         name: 'Moon',
         id: 'id',
-        astronauts: []
       }
     }
     const result = await service.getAstronautbyId('riri id')
@@ -40,15 +37,15 @@ describe('AstronautService', () => {
 
   it('should recruit an astronaut', async () => {
     const recruit: Recruit = { firstname: 'John', lastname: 'Doe' };
-    const planet: Planet = { id: 'id', name: 'moon', astronauts: [] } as Planet;
-    const savedAstronaut: Astronaut = { firstname: 'John', lastname: 'Doe', originPlanet: planet } as Astronaut;
+    const planet: Planet = { id: 'planet id', name: 'planet' } as Planet;
+    const savedAstronaut: TypeORMAstronaut = { firstname: 'John', lastname: 'Doe', originPlanet: planet } as TypeORMAstronaut;
 
     const result = await service.recruitAstronaut(recruit, 'id');
-    expect(result).toEqual(savedAstronaut);
+    expect(result).toEqual({ ...savedAstronaut, id: 'John id' });
   });
 
   it('should update an astronaut', async () => {
-    const updatedAstronaut: Astronaut = {
+    const updatedAstronaut: TypeORMAstronaut = {
       id: 'riri id',
       createdAt: new Date('2025-02-12T10:16:21.593Z'),
       updatedAt: new Date('2025-02-12T10:16:21.593Z'),
@@ -57,6 +54,7 @@ describe('AstronautService', () => {
       originPlanet: {
         name: 'DuckTown',
         id: 'DuckTown id',
+        isHabitable: true,
         astronauts: []
       }
     };
