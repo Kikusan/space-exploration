@@ -22,9 +22,8 @@ async function bootstrap() {
   });
 
   app.useGlobalPipes(new ValidationPipe({
-    transform: true, // Permet la transformation des données entrantes en type approprié
-    whitelist: true, // Ignore les propriétés non définies dans le DTO
-    forbidNonWhitelisted: true, // Renvoie une erreur 400 si des propriétés non autorisées sont envoyées
+    transform: true,
+    forbidNonWhitelisted: true,
   }));
   app.useGlobalInterceptors(new ErrorInterceptor());
 
